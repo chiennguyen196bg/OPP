@@ -1,0 +1,15 @@
+.invoice { margin:0px; }
+.control-label { white-space:nowrap; }
+.box-header .box-tools { position:static; }
+.table>thead>tr>th, .table>tbody>tr>th, .table>tfoot>tr>th, .table>thead>tr>td, .table>tbody>tr>td, .table>tfoot>tr>td { vertical-align: middle; }
+
+.btn-group { min-width: 75px; }
+
+#diagnosis-list th { white-space: nowrap; }
+#multipleChoiceList {}
+#multipleChoiceList .answer { margin-bottom: 10px; padding-bottom: 10px; border-bottom: 1px solid #EEE; }
+#multipleChoiceList .answer input[type=text] {}
+#multipleChoiceList .answer label { display: inline-block; margin: 0; padding: 6px 0; }
+#multipleChoiceList .answer label input[type=checkbox] { vertical-align: middle; margin: 0 0 0 8px; background: #FAFAFA; display: inline-block; height: 15px; width: 15px; }
+#multipleChoiceList .answer button[onclick] { margin: 6px 0; }
+#addChoice { border: 2px dashed #CCC; }

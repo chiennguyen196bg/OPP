@@ -32,13 +32,14 @@ public class QuanLyMonHoc {
 			// them file
 			saveToFile(mh);
 		} catch (IOException e) {
+			e.printStackTrace();
 			return false;
 		}
 		return true;
 	}
 
 	public MonHoc layMonHoc(String maHocPhan) {
-		MonHoc mh = null;
+		MonHoc mh;
 		// neu mon hoc co trong list
 		for (int num = 0, size = listMonHoc.size(); num < size; num++) {
 			mh = listMonHoc.get(num);
@@ -56,6 +57,7 @@ public class QuanLyMonHoc {
 			if (listMonHoc.size() > MAX_SIZE)
 				saveToFile(listMonHoc.removeLast());
 		} catch (ClassNotFoundException | IOException e) {
+			e.printStackTrace();
 			return null;
 		}
 		return mh;
@@ -93,6 +95,7 @@ public class QuanLyMonHoc {
 		try {
 			p.load(new FileInputStream(WORKING_DIR + "list.properties"));
 		} catch (IOException e) {
+			e.printStackTrace();
 			p = new Properties();
 		}
 		return p;

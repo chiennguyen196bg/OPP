@@ -1,6 +1,9 @@
 package opp.model;
 
 import java.util.ArrayList;
+import java.util.Random;
+
+import opp.utils.Utils;
 
 public class TracNghiem extends CauHoi{
 	private boolean coTheDaoDapAn;
@@ -24,7 +27,7 @@ public class TracNghiem extends CauHoi{
 	
 	public void daoDapAn() {
 		if(this.coTheDaoDapAn){
-			
+			this.dsDapAn = Utils.daoThuTu(this.dsDapAn);
 		}
 	}
 	
@@ -49,12 +52,13 @@ public class TracNghiem extends CauHoi{
 
 	@Override
 	public String inCauHoi() {
-		// TODO Auto-generated method stub
 		StringBuilder str = new StringBuilder();
-		str.append(this.getDeBai());
+		str.append(super.getDeBai());
 		str.append("\n");
-		this.getDeBai();
-		return null;
+		for(int i = 0, size = this.dsDapAn.size(); i < size; i++){
+			str.append(i+1).append(". ").append(this.dsDapAn.get(i).getNoiDung()).append("\n");
+		}
+		return str.toString();
 	}
 	
 }

@@ -57,7 +57,7 @@ public class DanhSachCauHoi extends HttpServlet {
 				listMonHoc = new LinkedList<MonHoc>();
 				app.setAttribute("listMonHoc", listMonHoc);
 			}
-
+			
 			// lay mon hoc.
 			QuanLyMonHoc ql = new QuanLyMonHoc(listMonHoc);
 			MonHoc monHoc = ql.layMonHoc(maHocPhan);

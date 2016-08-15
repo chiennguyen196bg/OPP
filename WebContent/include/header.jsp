@@ -11,7 +11,7 @@
 		<link href="asset/dist/css/AdminLTE.custom.css" rel="stylesheet" />
 		<link href="asset/dist/css/skins/skin-blue.min.css" rel="stylesheet" />
 		<script src="asset/jQuery/jQuery-2.1.4.min.js" type="text/javascript"></script>
-		<script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular.min.js"></script>
+		<script src="asset/jQuery/angular.min.js"></script>
 	</head>
 	<body class="hold-transition skin-blue sidebar-mini" ng-app="myApp" ng-controller="myCtrl">
 		<script type="text/javascript">

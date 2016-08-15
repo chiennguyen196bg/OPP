@@ -17,6 +17,7 @@
 
 <%
 	Properties p = QuanLyMonHoc.getProperties();
+	session.invalidate();
 %>
 <div class="content-wrapper">
 				<section class="content-header">
@@ -29,7 +30,7 @@
 					<div class="col-md-12">
 						<div class="col-md-6 col-md-offset-3">
 							<button type="button" class="btn btn-default btn-block" data-toggle="modal" data-target="#myModal" ng-click="link = 'danh-sach-cau-hoi'">Soạn câu hỏi</button>
-							<button type="button" class="btn btn-default btn-block" data-toggle="modal" data-target="#myModal" ng-click="link = '/danh-sach-cau-hoi.html'">Xây dựng đề thi</button>
+							<a href="danh-sach-de-thi" class="btn btn-default btn-block">Xây dựng đề thi</a>
 							<button type="button" class="btn btn-default btn-block" data-toggle="modal" data-target="#myModal" ng-click="link = '/danh-sach-cau-hoi.html'">Button 1</button>
 						</div>
 					</div>

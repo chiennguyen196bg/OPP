@@ -4,13 +4,12 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.LinkedList;
 
-public class MonHoc implements Serializable {
+public class MonHoc implements Serializable, Cloneable {
 	private String tenMonHoc;
 	private String maHocPhan;
 	private int soChuong;
 	private String gioiThieu;
 	private ArrayList<LinkedList<CauHoi>> dsCauHoi;
-	
 
 	public MonHoc(String maHocPhan, String tenMonHoc) {
 		this.maHocPhan = maHocPhan;
@@ -19,7 +18,7 @@ public class MonHoc implements Serializable {
 	}
 
 	public void themCauHoi(CauHoi cauHoi) {
-		if(cauHoi == null)
+		if (cauHoi == null)
 			throw new NullPointerException("Cau hoi is null");
 		LinkedList<CauHoi> linkedList = new LinkedList<CauHoi>();
 		linkedList.add(cauHoi);
@@ -27,7 +26,7 @@ public class MonHoc implements Serializable {
 	}
 
 	public void themCauHoiTuongDuong(int index, CauHoi cauHoi) {
-		if(cauHoi == null)
+		if (cauHoi == null)
 			throw new NullPointerException("Cau hoi is null");
 		this.dsCauHoi.get(index).add(cauHoi);
 	}
@@ -45,8 +44,8 @@ public class MonHoc implements Serializable {
 		ls.add(index2, cauHoi);
 
 	}
-	
-	public CauHoi layCauHoi(int index1, int index2){
+
+	public CauHoi layCauHoi(int index1, int index2) {
 		return this.dsCauHoi.get(index1).get(index2);
 	}
 
@@ -82,13 +81,27 @@ public class MonHoc implements Serializable {
 	public void setDsCauHoi(ArrayList<LinkedList<CauHoi>> dsCauHoi) {
 		this.dsCauHoi = dsCauHoi;
 	}
-	
+
 	public String getGioiThieu() {
 		return gioiThieu;
 	}
 
 	public void setGioiThieu(String gioiThieu) {
 		this.gioiThieu = gioiThieu;
+	}
+
+	public Object clone() throws CloneNotSupportedException {
+		return super.clone();
+	}
+
+	public CauHoi timCauHoiTuongDuong(CauHoi cauHoi) {
+		for (int i = 0, size = this.dsCauHoi.size(); i < size; i++) {
+			LinkedList<CauHoi> list = this.dsCauHoi.get(i);
+			int index = list.indexOf(cauHoi);
+			if (index > -1)
+				return list.get((index + 1) % (list.size()));
+		}
+		return cauHoi;
 	}
 
 }

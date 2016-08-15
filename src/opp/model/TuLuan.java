@@ -23,6 +23,10 @@ public class TuLuan extends CauHoi{
 		this.goiY = goiY;
 	}
 	public String inCauHoi(){
-		return this.getDeBai();
+		return super.getDeBai();
+	}
+	@Override
+	public void daoDapAn() {
+		
 	}
 }

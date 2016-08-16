@@ -50,17 +50,8 @@ public class DanhSachMonHoc extends HttpServlet {
 		request.setCharacterEncoding("utf-8");
 
 		if (request.getParameter("action").equals("delete")) {
-			// lay list mon hoc
-			ServletContext app = getServletConfig().getServletContext();
-			LinkedList<MonHoc> listMonHoc = (LinkedList<MonHoc>) app.getAttribute("listMonHoc");
-			if (listMonHoc == null) {
-				listMonHoc = new LinkedList<MonHoc>();
-				app.setAttribute("listMonHoc", listMonHoc);
-			}
-
 			// xoa mon hoc
-			QuanLyMonHoc ql = new QuanLyMonHoc(listMonHoc);
-			ql.xoaMonHoc(request.getParameter("maHocPhan"));
+			QuanLyMonHoc.xoaMonHoc(request.getParameter("maHocPhan"));
 			response.getWriter().append("Xóa môn hoc thành công");
 		}
 	}

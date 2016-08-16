@@ -9,6 +9,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import opp.model.MonHoc;
 import opp.quanly.QuanLyMonHoc;
@@ -38,27 +39,16 @@ public class ThemSuaMonHoc extends HttpServlet {
 		request.setCharacterEncoding("utf-8");
 
 		String maHocPhan = (String) request.getParameter("maHocPhan");
-		
+		HttpSession session = request.getSession(true);
 		MonHoc monHoc;
 		if (maHocPhan == null) {
 			monHoc = new MonHoc("", "");
 			request.setAttribute("action", "add");
 		} else {
-
-			// lay list mon hoc
-			ServletContext app = getServletConfig().getServletContext();
-			LinkedList<MonHoc> listMonHoc = (LinkedList<MonHoc>) app.getAttribute("listMonHoc");
-			if (listMonHoc == null) {
-				listMonHoc = new LinkedList<MonHoc>();
-				app.setAttribute("listMonHoc", listMonHoc);
-			}
-
-			// lay mon hoc.
-			QuanLyMonHoc ql = new QuanLyMonHoc(listMonHoc);
-			monHoc = ql.layMonHoc(maHocPhan);
+			monHoc = QuanLyMonHoc.layMonHoc(maHocPhan);
 			request.setAttribute("action", "edit");
 		}
-		request.setAttribute("monHoc", monHoc);
+		session.setAttribute("monHoc", monHoc);
 		
 		request.getRequestDispatcher("mon-hoc-them-sua.jsp").forward(request, response);
 
@@ -73,30 +63,21 @@ public class ThemSuaMonHoc extends HttpServlet {
 		response.setContentType("text/html;charset=UTF-8");
 		request.setCharacterEncoding("utf-8");
 		
+		HttpSession session = request.getSession();
+		MonHoc monHoc = (MonHoc) session.getAttribute("monHoc");
 		String action = (String) request.getParameter("action");
 		if (action.equals("edit")) {
-			// lay list mon hoc
+			
 			String old_maHocPhan = request.getParameter("old_maHocPhan");
-			ServletContext app = getServletConfig().getServletContext();
-			LinkedList<MonHoc> listMonHoc = (LinkedList<MonHoc>) app.getAttribute("listMonHoc");
-			if (listMonHoc == null) {
-				listMonHoc = new LinkedList<MonHoc>();
-				app.setAttribute("listMonHoc", listMonHoc);
-			}
-
-			// lay mon hoc.
-			QuanLyMonHoc ql = new QuanLyMonHoc(listMonHoc);
-			MonHoc monHoc = ql.layMonHoc(old_maHocPhan);
 			monHoc.setTenMonHoc(request.getParameter("tenMonHoc"));
 			monHoc.setMaHocPhan(request.getParameter("maHocPhan"));
 			monHoc.setSoChuong(Integer.parseInt(request.getParameter("soChuong")));
 			monHoc.setGioiThieu(request.getParameter("gioiThieu"));
-			ql.xoaMonHoc(old_maHocPhan);
-			QuanLyMonHoc.themMonHoc(monHoc);
+			QuanLyMonHoc.suaMonHoc(old_maHocPhan, monHoc);
 			
 			response.getWriter().append("Chỉnh sửa thành công");
 		} else if (action.equals("add")) {
-			MonHoc monHoc = new MonHoc(request.getParameter("maHocPhan"), request.getParameter("tenMonHoc"));
+			monHoc = new MonHoc(request.getParameter("maHocPhan"), request.getParameter("tenMonHoc"));
 			monHoc.setSoChuong(Integer.parseInt(request.getParameter("soChuong")));
 			monHoc.setGioiThieu(request.getParameter("gioiThieu"));
 			QuanLyMonHoc.themMonHoc(monHoc);

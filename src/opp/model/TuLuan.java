@@ -8,25 +8,10 @@ public class TuLuan extends CauHoi{
 	public TuLuan(){
 		
 	}
-	public void themGoiY(){
-		
-	}
-	public void suaGoiY(){
-		
-	}
-	
-	
 	public String getGoiY() {
 		return goiY;
 	}
 	public void setGoiY(String goiY) {
 		this.goiY = goiY;
-	}
-	public String inCauHoi(){
-		return super.getDeBai();
-	}
-	@Override
-	public void daoDapAn() {
-		
 	}
 }

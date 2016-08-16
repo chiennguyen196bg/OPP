@@ -11,7 +11,7 @@
 						<li class="active"><a href=""><i class="fa fa-file-o"></i> Đề thi</a></li>
 					</ol>
 				</section>
-				<section class="content" ng-init="updateListCauHoi()">
+				<section class="content">
 					<div class="row">
 						<div class="col-md-12">
 							<div class="form-horizontal" method="post" action="">
@@ -23,39 +23,74 @@
 										<div class="tab-content">
 											<div class="tab-pane active" id="tab-info">
 												
-													<div class="col-md-5">
-														<div style="overflow: auto; max-height:200px;">
-															<div class="list-group">
-																<button class="list-group-item" ng-repeat="x in listCauHoi.list" ng-click="select($index)">{{x.deBai}}</button>
-																
-															</div>
-														</div>
-														<div style="padding: 5px; overflow: auto;">
-															<button class="btn btn-info pull-right" ng-click="getInfo()">Xem thông tin</button>
-														</div>
-														<div style="padding: 5px; overflow: auto;">
-															<button class="btn btn-info pull-right">Chọn ngẫu nhiên</button>
-														</div>
-														
-														<div>
+													<div class="col-md-12">
+													<div class="form-group">
+														<label for="kiHoc" class="col-md-4">Dạng đề thi:</label>
+														<div class="col-md-6">
 															<label class="radio-inline">
-															<input type="radio" ng-model="listCauHoi.type" name="optradio" value="0">Cả hai</label>
-															<label class="radio-inline" >
-															<input type="radio" ng-model="listCauHoi.type" name="optradio" value="1">Trắc Nghiệm</label>
+															<input ng-model="dangCauHoi" type="radio" name="optradio" value="1">Trắc nghiệm
+															</label>
 															<label class="radio-inline">
-															<input type="radio" ng-model="listCauHoi.type" name="optradio" value="2">Tự luận</label>
-															<button class="btn btn-info pull-right" ng-click="updateListCauHoi()">Lọc</button>
+															<input ng-model="dangCauHoi" type="radio" name="optradio" value="2">Tự luận
+															</label>
+															<label class="radio-inline">
+															<input ng-model="dangCauHoi" type="radio" name="optradio" value="0">Cả hai
+															</label>
 														</div>
 													</div>
-													<div class="col-md-7">
-														<div>
-															<textarea ng-bind="cauHoiInfo" cols="40" rows="6" class="textarea" style="width:100%;font-size:14px;line-height:18px;border:1px solid rgb(221,221,221);padding:10px"></textarea>
-														</div>
-														<div style="padding: 5px; overflow: auto;" class="inline">
-															<p>Điểm cho câu hỏi <input type="number" ng-model="diem" ng-value="diem" step="0.5"></p>
-															<button class="btn btn-info pull-right" ng-click="addToDeThi();getCauHoiDeThi();getDeThi()">Thêm vào đề thi</button>
+													<div class="form-group">
+														<label for="kiHoc" class="col-md-4">Hình thức:</label>
+														<div class="col-md-6">
+															<label class="radio-inline">
+															<input ng-model="sapXep" type="radio" name="optradio2" value="0">Trắc nghiệm và tự luận riêng
+															</label>
+															<label class="radio-inline">
+															<input ng-model="sapXep" type="radio" name="optradio2" value="1">Trắc nghiệm và tự luận chung
+															</label>
 														</div>
 													</div>
+												</div>
+												<div class="col-md-4">
+													<div class="form-group" >
+														<label class="col-sm-3 control-label">Số câu</label>
+														<div class="col-sm-7">
+														<input ng-model="soCau" type="number" step="1" class="form-control" />
+														</div>
+													</div>
+													<div class="form-group">
+														<label class="col-sm-3 control-label">Độ khó:</label>
+														<div class="col-sm-7">
+															<select ng-model="doKho" class="form-control">
+																<option value="0">Bất kì</option>
+																<option value="1">Rất dễ</option>
+																<option value="2">Dễ</option>
+																<option value="3">Trung Binh</option>
+																<option value="4">KHó</option>
+																<option value="5">Rất khó</option>
+															</select>
+														</div>
+													</div>
+												</div>
+												<!-- <div class="col-md-8">
+													<label class="radio-inline"><input type="checkbox" name="optradio3">Số chương mỗi câu bất kì</label>
+													<div class="col-md-8 pull-right">
+														<div class="form-group" >
+															<label class="col-sm-5 control-label">Số câu</label>
+															<div class="col-sm-4"><input type="number" step="1" class="form-control" /></div>
+														</div>
+														<div class="form-group" >
+															<label class="col-sm-5 control-label">Số câu</label>
+															<div class="col-sm-4"><input type="number" step="1" class="form-control" /></div>
+														</div>
+														<div class="form-group" >
+															<label class="col-sm-5 control-label">Số câu</label>
+															<div class="col-sm-4"><input type="number" step="1" class="form-control" /></div>
+														</div>
+													</div>
+												</div> -->
+												<div class="col-md-12">
+													<button ng-click="taoDeThi();getCauHoiDeThi();getDeThi()" class="btn btn-info pull-right">Tạo đề thi</button>
+												</div>
 												
 											</div>
 											<!-- /.tab-pane -->
@@ -155,66 +190,7 @@
 			$scope.listCauHoiTrongDe.index = $index;
 		};
 
-		$scope.updateListCauHoi = function(){
-			var req = {
-				method : 'POST',
-				url : 'them-bang-tay',
-				headers: {'Content-Type': 'application/x-www-form-urlencoded'},
-				data : $.param({
-					action : "getCauHoiList",
-					type : $scope.listCauHoi.type
-				})
-			};
-			$http(req).then(function(response){
-				$scope.listCauHoi.list = response.data;
-			}, function(response){
-				$scope.message = "error";
-			});
-		};
-
-		$scope.getInfo = function(){
-			var index = $scope.listCauHoi.index;
-			var req = {
-				method : 'POST',
-				url : 'them-bang-tay',
-				headers: {'Content-Type': 'application/x-www-form-urlencoded'},
-				data : $.param({
-					action: "getCauHoiInfo",
-					index1 : $scope.listCauHoi.list[index].index1,
-					index2 : $scope.listCauHoi.list[index].index2
-				})
-			};
-			$http(req).then(function(response){
-				$scope.cauHoiInfo = response.data;
-			}, function(response){
-				$scope.message = "error";
-			});
-			
-		};
-
-
-
-
-		$scope.addToDeThi = function(){
-			var index = $scope.listCauHoi.index;
-			var req = {
-				method : 'POST',
-				url : 'them-bang-tay',
-				headers: {'Content-Type': 'application/x-www-form-urlencoded'},
-				data : $.param({
-					action: "addToDeThi",
-					index1 : $scope.listCauHoi.list[index].index1,
-					index2 : $scope.listCauHoi.list[index].index2,
-					diem : $scope.diem
-				})
-			};
-			$http(req).then(function(response){
-				$scope.message = response.data;
-			}, function(response){
-				$scope.message = "error";
-			});
-		};
-
+		
 		$scope.getCauHoiDeThi = function(){
 			var req = {
 				method : 'POST',
@@ -313,6 +289,28 @@
 			}, function(response){
 				$scope.message = "error";
 			});
+		};
+
+		$scope.taoDeThi = function(){
+			var index = $scope.listCauHoi.index;
+			var req = {
+				method : 'POST',
+				url : 'them-tu-dong',
+				headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+				data : $.param({
+					action: "taoDeThi",
+					doKho : $scope.doKho,
+					dangCauHoi : $scope.dangCauHoi,
+					soCau : $scope.soCau,
+					sapXep : $scope.sapXep
+				})
+			};
+			$http(req).then(function(response){
+				$scope.message = response.data;
+			}, function(response){
+				$scope.message = "error";
+			});
+			
 		};
 		
 	});

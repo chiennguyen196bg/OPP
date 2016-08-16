@@ -44,26 +44,15 @@ public class DanhSachCauHoi extends HttpServlet {
 
 		if (maHocPhan == null)
 			maHocPhan = (String) session.getAttribute("maHocPhan");
-		
+
 		if (maHocPhan == null)
 			response.sendRedirect("/OPP/index.jsp");
 		else {
 			session.setAttribute("maHocPhan", new String(maHocPhan));
-			
-			// lay list mon hoc
-			ServletContext app = getServletConfig().getServletContext();
-			LinkedList<MonHoc> listMonHoc = (LinkedList<MonHoc>) app.getAttribute("listMonHoc");
-			if (listMonHoc == null) {
-				listMonHoc = new LinkedList<MonHoc>();
-				app.setAttribute("listMonHoc", listMonHoc);
-			}
-			
-			// lay mon hoc.
-			QuanLyMonHoc ql = new QuanLyMonHoc(listMonHoc);
-			MonHoc monHoc = ql.layMonHoc(maHocPhan);
-			request.setAttribute("monHoc", monHoc);
+			MonHoc monHoc = QuanLyMonHoc.layMonHoc(maHocPhan);
+			session.setAttribute("monHoc", monHoc);
 			request.getRequestDispatcher("danh-sach-cau-hoi.jsp").forward(request, response);
-//			response.getWriter().append("Don!");
+			// response.getWriter().append("Don!");
 			// response.sendRedirect("/OPP/index.jsp");
 		}
 
@@ -77,31 +66,20 @@ public class DanhSachCauHoi extends HttpServlet {
 			throws ServletException, IOException {
 		response.setContentType("text/html;charset=UTF-8");
 		request.setCharacterEncoding("utf-8");
-		
-		if(request.getParameter("action").equals("delete")){
+
+		HttpSession session = request.getSession();
+		if (request.getParameter("action").equals("delete")) {
 			String index1 = request.getParameter("index1");
 			String index2 = request.getParameter("index2");
-			if((index1 != null) && (index2 != null)){
-				String maHocPhan = (String) request.getSession(true).getAttribute("maHocPhan");
-				// lay list mon hoc
-				ServletContext app = getServletConfig().getServletContext();
-				LinkedList<MonHoc> listMonHoc = (LinkedList<MonHoc>) app.getAttribute("listMonHoc");
-				if (listMonHoc == null) {
-					listMonHoc = new LinkedList<MonHoc>();
-					app.setAttribute("listMonHoc", listMonHoc);
-				}
 
-				// lay mon hoc.
-				QuanLyMonHoc ql = new QuanLyMonHoc(listMonHoc);
-				MonHoc monHoc = ql.layMonHoc(maHocPhan);
-				
-				monHoc.xoaCauHoi(Integer.parseInt(index1), Integer.parseInt(index2));
-				response.getWriter().append("Xoa thanh cong");
-				
-			}
+			MonHoc monHoc = (MonHoc) session.getAttribute("monHoc");
+			
+			QuanLyMonHoc ql = new QuanLyMonHoc(monHoc);
+			ql.xoaCauHoi(Integer.parseInt(index1), Integer.parseInt(index2));
+			QuanLyMonHoc.saveToFile(monHoc);
+			response.getWriter().append("Xoa thanh cong");
 		}
-		// TODO Auto-generated method stub
-		
+
 	}
 
 }

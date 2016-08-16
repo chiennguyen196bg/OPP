@@ -34,9 +34,6 @@ public class DeThi implements Serializable {
 		this.dsCauHoi = dsCauHoi;
 	}
 
-	public void daoCauHoi(){
-		this.dsCauHoi = Utils.daoThuTu(this.dsCauHoi);
-	}
 
 	public int getSoCauHoi() {
 		return soCauHoi;
@@ -87,16 +84,6 @@ public class DeThi implements Serializable {
 		this.tongDiem = tongDiem;
 	}
 	
-	public StringBuilder inDeThi(){
-		StringBuilder str = new StringBuilder();
-		str.append(this.getTenDeThi()).append("\n");
-		str.append("Kỳ: ").append(this.getKy()).append("Năm học: ").append(this.getNamHoc()).append("\n");
-		for(int i = 0, size = this.dsCauHoi.size(); i < size ; i++){
-			CauHoi cauHoi = this.dsCauHoi.get(i);
-			str.append("Câu ").append(i+1).append(" (").append(cauHoi.getDiem()).append(") \n");
-			str.append(cauHoi.getDeBai()).append("\n");
-		}
-		return str;
-	}
+	
 
 }

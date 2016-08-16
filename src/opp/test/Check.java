@@ -91,7 +91,6 @@ public class Check {
 		tracNghiem.getDsDapAn().add(da1);
 		tracNghiem.getDsDapAn().add(da2);
 		tracNghiem.getDsDapAn().add(da3);
-		tracNghiem.daoDapAn();
 		for(DapAn x : tracNghiem.getDsDapAn()){
 			System.out.println(x.getNoiDung());
 		}

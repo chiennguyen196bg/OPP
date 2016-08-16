@@ -13,27 +13,6 @@ public class TracNghiem extends CauHoi{
 		this.dsDapAn = new ArrayList<DapAn>();
 	}
 	
-	public void themDapAn(DapAn dapAn){
-		this.dsDapAn.add(dapAn);
-	}
-	
-	public void xoaDapAn(){
-		
-	}
-	
-	public void suaDapAn(){
-		
-	}
-	
-	public void daoDapAn() {
-		if(this.coTheDaoDapAn){
-			this.dsDapAn = Utils.daoThuTu(this.dsDapAn);
-		}
-	}
-	
-	
-	
-
 	public boolean isCoTheDaoDapAn() {
 		return coTheDaoDapAn;
 	}
@@ -50,15 +29,5 @@ public class TracNghiem extends CauHoi{
 		this.dsDapAn = dsDapAn;
 	}
 
-	@Override
-	public String inCauHoi() {
-		StringBuilder str = new StringBuilder();
-		str.append(super.getDeBai());
-		str.append("\n");
-		for(int i = 0, size = this.dsDapAn.size(); i < size; i++){
-			str.append(i+1).append(". ").append(this.dsDapAn.get(i).getNoiDung()).append("\n");
-		}
-		return str.toString();
-	}
 	
 }

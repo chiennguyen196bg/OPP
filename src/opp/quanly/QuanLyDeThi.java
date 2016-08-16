@@ -13,11 +13,19 @@ import java.io.ObjectOutputStream;
 import java.util.LinkedList;
 import java.util.Properties;
 
+import opp.model.CauHoi;
 import opp.model.DeThi;
+import opp.utils.Utils;
 import opp.model.DeThi;
 
 public class QuanLyDeThi {
 	private final static String WORKING_DIR = "D:/WorkSpace/JavaEE/OPP/src/data/de_thi/";
+	private DeThi deThi;
+	
+	public QuanLyDeThi(DeThi deThi){
+		this.deThi = deThi;
+	}
+	
 	
 	public static void themDeThi(DeThi deThi) {
 		Properties p = new Properties();
@@ -86,6 +94,26 @@ public class QuanLyDeThi {
 		}
 		return p;
 	}
+	
+	
+	
+	public void daoCauHoi(){
+		deThi.setDsCauHoi(Utils.daoThuTu(deThi.getDsCauHoi()));
+	}
+	
+	public StringBuilder inDeThi(){
+		StringBuilder str = new StringBuilder();
+		str.append(deThi.getTenDeThi()).append("\n");
+		str.append("Kỳ: ").append(deThi.getKy()).append("Năm học: ").append(deThi.getNamHoc()).append("\n");
+		for(int i = 0, size = deThi.getDsCauHoi().size(); i < size ; i++){
+			CauHoi cauHoi = deThi.getDsCauHoi().get(i);
+			str.append("Câu ").append(i+1).append(" (").append(cauHoi.getDiem()).append(") \n");
+			str.append(cauHoi.getDeBai()).append("\n");
+		}
+		return str;
+	}
+	
+	
 
 	public static boolean saveToFile(DeThi deThi) throws IOException {
 		FileOutputStream f;

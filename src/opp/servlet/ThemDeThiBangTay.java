@@ -19,7 +19,8 @@ import opp.model.DeThi;
 import opp.model.MonHoc;
 import opp.model.TracNghiem;
 import opp.model.TuLuan;
-import opp.quanly.QuanLyDeThi;
+import opp.quanly.QuanLyCauHoi;
+import opp.quanly.QuanLyMonHoc;
 
 /**
  * Servlet implementation class ThemDeThiBangTay
@@ -36,17 +37,6 @@ public class ThemDeThiBangTay extends HttpServlet {
         // TODO Auto-generated constructor stub
     }
 
-	/**
-	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
-	 */
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		response.setContentType("text/html;charset=UTF-8");
-		request.setCharacterEncoding("utf-8");
-//		HttpSession session = request.getSession();
-//		MonHoc monHoc = (MonHoc) session.getAttribute("monHoc");
-//		DeThi deThi = (DeThi) session.getAttribute("deThi");
-		request.getRequestDispatcher("them-bang-tay.jsp").forward(request, response);
-	}
 
 	/**
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
@@ -58,7 +48,7 @@ public class ThemDeThiBangTay extends HttpServlet {
 		HttpSession session = request.getSession();
 		MonHoc monHoc = (MonHoc) session.getAttribute("monHoc");
 		DeThi deThi = (DeThi) session.getAttribute("deThi");
-		deThi.setTenDeThi("De thi " + monHoc.getTenMonHoc());
+		
 		String action = request.getParameter("action");
 		
 		if(action.equals("getCauHoiList")){
@@ -74,31 +64,6 @@ public class ThemDeThiBangTay extends HttpServlet {
 			double diem = Double.parseDouble(request.getParameter("diem"));
 			this.chonVaoDeThi(deThi, monHoc, index1, index2, diem);
 			
-		} else if(action.equals("getCauHoiDeThi")){
-			response.getWriter().append(this.getCauHoiDeThi(deThi));
-		} else if(action.equals("getDeThi")){
-			response.getWriter().append(deThi.inDeThi());
-		} else if(action.equals("xoaCauHoi")){
-			int index = Integer.parseInt(request.getParameter("index"));
-			deThi.getDsCauHoi().remove(index);
-		} else if(action.equals("xaoTronCauHoi")){
-			deThi.daoCauHoi();
-		} else if(action.equals("thayThe")){
-			int index = Integer.parseInt(request.getParameter("index"));
-			deThi.getDsCauHoi().set(index, monHoc.timCauHoiTuongDuong(deThi.getDsCauHoi().get(index)));
-		} else if(action.equals("inRaFile")){
-			
-		} else if(action.equals("save")){
-			deThi.setSoCauHoi(deThi.getDsCauHoi().size());
-
-			deThi.setNamHoc(request.getParameter("hocKi"));
-			deThi.setThoiGian(Integer.parseInt(request.getParameter("thoiGian")));
-			deThi.setKy(Integer.parseInt(request.getParameter("ki")));
-			QuanLyDeThi.themDeThi(deThi);
-			response.getWriter().append("Them de thi thanh cong");
-		} else if(action.equals("delete")){
-			session.removeAttribute("deThi");
-			session.removeAttribute("monHoc");
 		}
 		
 	}
@@ -141,9 +106,11 @@ public class ThemDeThiBangTay extends HttpServlet {
 	}
 	
 	protected String getCauHoiInfo(MonHoc monHoc, int i1, int i2){
-		CauHoi cauHoi = monHoc.layCauHoi(i1, i2);
+		QuanLyMonHoc ql = new QuanLyMonHoc(monHoc);
+		CauHoi cauHoi = ql.layCauHoi(i1, i2);
+		QuanLyCauHoi qlCauHoi = new QuanLyCauHoi(cauHoi);
 		StringBuilder str = new StringBuilder();
-		str.append(cauHoi.inCauHoi()).append("\n");
+		str.append(qlCauHoi.inCauHoi()).append("\n");
 		str.append("Độ khó:").append(cauHoi.getDoKho()).append('\n');
 		str.append("Chương:").append(cauHoi.getChuong()).append('\n');
 		
@@ -151,23 +118,13 @@ public class ThemDeThiBangTay extends HttpServlet {
 	}
 	
 	protected void chonVaoDeThi(DeThi deThi, MonHoc monHoc, int index1, int index2, double diem){
-		CauHoi cauHoi = monHoc.layCauHoi(index1, index2);
+		QuanLyMonHoc ql = new QuanLyMonHoc(monHoc);
+		CauHoi cauHoi = ql.layCauHoi(index1, index2);
 		cauHoi.setDiem(diem);
 		deThi.getDsCauHoi().add(cauHoi);
 		LinkedList ls = monHoc.getDsCauHoi().get(index1);
 		ls.addFirst(ls.remove(index2));
 	}
 	
-	protected String getCauHoiDeThi(DeThi deThi){
-		JSONArray arr = new JSONArray();
-		ArrayList<CauHoi> list = deThi.getDsCauHoi();
-		for(int i = 0, size = list.size(); i< size; i++){
-			JSONObject obj = new JSONObject();
-			obj.put("index", i);
-			obj.put("deBai", list.get(i).getDeBai());
-			arr.add(obj);
-		}
-		return arr.toJSONString();
-	}
 
 }

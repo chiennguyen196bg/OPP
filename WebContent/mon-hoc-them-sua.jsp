@@ -6,7 +6,7 @@
 
 
 <%
-	MonHoc monHoc = (MonHoc) request.getAttribute("monHoc");
+	MonHoc monHoc = (MonHoc) session.getAttribute("monHoc");
 	boolean edit = ((String) request.getAttribute("action")).equals("edit");
 	String maHocPhan = (String) request.getParameter("maHocPhan");
 %>
@@ -112,7 +112,7 @@
 			};
 			$http(req).then(function(response){
 				$scope.message = response.data;
-				// $window.open("danh-sach-cau-hoi","_self");
+				$window.open("danh-sach-mon-hoc","_self");
 			}, function(response){
 				$scope.message = "error";
 			});

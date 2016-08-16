@@ -1,15 +1,13 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-	pageEncoding="UTF-8"%>
-
+pageEncoding="UTF-8"%>
 <%@ page import="opp.quanly.QuanLyDeThi"%>
+<%@ page import="opp.quanly.QuanLyMonHoc"%>
 <%@ page import="java.util.Properties"%>
 <%@ page import="java.util.Date"%>
-
-
 <jsp:include page="/include/header.jsp" />
-
 <%
 Properties p = QuanLyDeThi.getProperties();
+Properties pMonHoc = QuanLyMonHoc.getProperties();
 Date date = new Date();
 %>
 <div class="content-wrapper">
@@ -17,9 +15,9 @@ Date date = new Date();
 		<h1>Quản lý đề thi</h1>
 		<ol class="breadcrumb">
 			<li><a href=""><i class="fa fa-dashboard"></i> Bảng điều
-					khiển</a></li>
+			khiển</a></li>
 			<li class="active"><a href=""><i class="fa fa-pencil"></i>
-					Đề thi</a></li>
+			Đề thi</a></li>
 		</ol>
 	</section>
 	<section class="content">
@@ -28,19 +26,18 @@ Date date = new Date();
 				<div class="box">
 					<div class="box-header">
 						<h3 class="box-title pull-right">
-							<div class="btn-group">
-								<a href="them-sua-mon-hoc" class="btn btn-default btn-flat"><i
-									class="fa fa-plus"></i> Thêm mới</a>
-							</div>
+						<div class="btn-group">
+							<button type="button" class="btn btn-default btn-block" data-toggle="modal" data-target="#myModal">Thêm mới</button>
+						</div>
 						</h3>
 						<div class="box-tools pull-left">
 							<form method="get" action="">
 								<div class="input-group pull-left" style="width: 250px;">
 									<input type="text" name="keyword" value="" class="form-control"
-										placeholder="Search">
+									placeholder="Search">
 									<div class="input-group-btn">
 										<button type="submit" value="action" class="btn btn-default">
-											<i class="fa fa-search"></i>
+										<i class="fa fa-search"></i>
 										</button>
 									</div>
 								</div>
@@ -59,8 +56,8 @@ Date date = new Date();
 										<th class="text-right">Thao tác</th>
 									</tr>
 									<%
-										for (String key : p.stringPropertyNames()) {
-											date.setTime(Long.parseLong(key));
+									for (String key : p.stringPropertyNames()) {
+									date.setTime(Long.parseLong(key));
 									%>
 									<tr>
 										<td><div><%=p.getProperty(key)%></div></td>
@@ -70,31 +67,58 @@ Date date = new Date();
 												<a href="" class="btn btn-default"
 													ng-click="edit('<%=key%>')"> <i class="fa fa-edit"></i>
 												</a> <a href="" class="btn btn-default"
-													ng-click="delete('<%=key%>')"> <i class="fa fa-trash"></i>
-												</a>
-											</div>
-										</td>
-									</tr>
-									<%
-										}
-									%>
-								</tbody>
-							</table>
-						</form>
-					</div>
-					<p>{{message}}</p>
-					<!-- /.box-body -->
-
+												ng-click="delete('<%=key%>')"> <i class="fa fa-trash"></i>
+											</a>
+										</div>
+									</td>
+								</tr>
+								<%
+								}
+								%>
+							</tbody>
+						</table>
+					</form>
 				</div>
-				<!-- /.box -->
+				<p>{{message}}</p>
+				<!-- /.box-body -->
+			</div>
+			<!-- /.box -->
+		</div>
+	</div>
+</section>
+</div>
+<div id="myModal" class="modal fade" role="dialog">
+<div class="modal-dialog">
+	<!-- Modal content-->
+	<div class="modal-content">
+		<div class="modal-header">
+			<button type="button" class="close" data-dismiss="modal">&times;</button>
+			<h4 class="modal-title">Chọn môn học</h4>
+		</div>
+		<div class="modal-body" style="overflow:auto;">
+			<select class="form-control" ng-model="maHocPhan">
+				<option value="">--Chọn môn học--</option>
+				<%for(String key : pMonHoc.stringPropertyNames()){ %>
+				<option value="<%= key %>"><%= pMonHoc.getProperty(key) %></option>
+				<%} %>
+				
+			</select>
+			<br/>
+			<div class="pull-right">
+				
+				<a href="danh-sach-mon-hoc">Quản lý môn học</a>
 			</div>
 		</div>
-	</section>
+		<div class="modal-footer">
+			<button type="button" ng-click="onclick('tuDong')" class="btn btn-primary">Tao tự động</button>
+			<button type="button" ng-click="onclick('bangTay')" class="btn btn-primary">Tao bằng tay</button>
+			<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+		</div>
+	</div>
+</div>
 </div>
 <!-- /.content-wrapper -->
-
 <%@ include file="/include/footer.jsp"%>
-
 <script type="text/javascript">
 		app.controller('myCtrl', function($scope, $http, $window, $location) {
 			$scope.delete = function(key){
@@ -102,7 +126,7 @@ Date date = new Date();
 					method : 'POST',
 					url : 'danh-sach-de-thi',
 					headers: {'Content-Type': 'application/x-www-form-urlencoded'},
-	 				data: $.param({
+					data: $.param({
 						maDeThi : key,
 						action : "delete"
 					})
@@ -117,5 +141,9 @@ Date date = new Date();
 			$scope.edit = function(key){
 				$window.open("sua-de-thi?maDeThi="+key, "_self");
 			}
+			$scope.onclick = function(str){
+				if($scope.maHocPhan != null)
+					$window.open("tao-de-thi?maHocPhan=" +  $scope.maHocPhan +"&taoDeThi=" + str, "_self");
+			};
 		});
 </script>

@@ -11,7 +11,7 @@
 <%@ page import="java.util.ArrayList" %>
 
 <% 
-MonHoc monHoc = (MonHoc) request.getAttribute("monHoc"); 
+MonHoc monHoc = (MonHoc) session.getAttribute("monHoc"); 
 CauHoi cauHoi = (CauHoi) request.getAttribute("cauHoi");
 Integer index1 = (Integer) request.getAttribute("index1");
 Integer index2 = (Integer) request.getAttribute("index2");
@@ -117,12 +117,12 @@ Integer index2 = (Integer) request.getAttribute("index2");
 										<div class="form-group">
 											<label class="col-sm-2 control-label">Độ khó</label>
 											<div class="col-sm-3">
-												<select name="" class="form-control" ng-model="doKho">
+												<select class="form-control" ng-model="doKho" ng-value="doKho">
 													<option value="1">1/5 - Cực Dễ</option>
 													<option value="2">2/5 - Dễ</option>
 													<option value="3">3/5 - Trung Bình</option>
-													<option value="2">4/5 - Khó</option>
-													<option value="2">5/5 - Cực Khó</option>
+													<option value="4">4/5 - Khó</option>
+													<option value="5">5/5 - Cực Khó</option>
 												</select>
 											</div>
 											<label class="col-sm-2 control-label">Chương</label>
@@ -152,7 +152,7 @@ Integer index2 = (Integer) request.getAttribute("index2");
 									</div>
 									<!-- /.box-body -->
 									<p>{{cauHoi | json}}</p>
-									
+									<p>{{doKho}}</p>
 									<p>{{index1}}</p>
 									<p>{{message}}</p>
 								</div>
@@ -283,6 +283,7 @@ Integer index2 = (Integer) request.getAttribute("index2");
 			};
 			$http(req).then(function(response){
 				$scope.message = response.data;
+				$window.open("danh-sach-cau-hoi","_self");
 			}, function(response){
 				$scope.message = "error";
 			});

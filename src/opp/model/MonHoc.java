@@ -17,38 +17,7 @@ public class MonHoc implements Serializable, Cloneable {
 		dsCauHoi = new ArrayList<LinkedList<CauHoi>>();
 	}
 
-	public void themCauHoi(CauHoi cauHoi) {
-		if (cauHoi == null)
-			throw new NullPointerException("Cau hoi is null");
-		LinkedList<CauHoi> linkedList = new LinkedList<CauHoi>();
-		linkedList.add(cauHoi);
-		dsCauHoi.add(linkedList);
-	}
-
-	public void themCauHoiTuongDuong(int index, CauHoi cauHoi) {
-		if (cauHoi == null)
-			throw new NullPointerException("Cau hoi is null");
-		this.dsCauHoi.get(index).add(cauHoi);
-	}
-
-	public void xoaCauHoi(int index1, int index2) {
-		LinkedList<CauHoi> ls = this.dsCauHoi.get(index1);
-		ls.remove(index2);
-		if (ls.isEmpty())
-			this.dsCauHoi.remove(index1);
-	}
-
-	public void suaCauHoi(int index1, int index2, CauHoi cauHoi) {
-		LinkedList<CauHoi> ls = this.dsCauHoi.get(index1);
-		ls.remove(index2);
-		ls.add(index2, cauHoi);
-
-	}
-
-	public CauHoi layCauHoi(int index1, int index2) {
-		return this.dsCauHoi.get(index1).get(index2);
-	}
-
+	
 	// Getter va Setter
 	public String getTenMonHoc() {
 		return tenMonHoc;
@@ -94,14 +63,6 @@ public class MonHoc implements Serializable, Cloneable {
 		return super.clone();
 	}
 
-	public CauHoi timCauHoiTuongDuong(CauHoi cauHoi) {
-		for (int i = 0, size = this.dsCauHoi.size(); i < size; i++) {
-			LinkedList<CauHoi> list = this.dsCauHoi.get(i);
-			int index = list.indexOf(cauHoi);
-			if (index > -1)
-				return list.get((index + 1) % (list.size()));
-		}
-		return cauHoi;
-	}
-
 }
+
+

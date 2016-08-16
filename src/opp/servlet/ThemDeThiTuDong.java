@@ -3,6 +3,7 @@ package opp.servlet;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.LinkedList;
+import java.util.Random;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -37,24 +38,6 @@ public class ThemDeThiTuDong extends HttpServlet {
 	}
 
 	/**
-	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse
-	 *      response)
-	 */
-	protected void doGet(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {
-		response.setContentType("text/html;charset=UTF-8");
-		request.setCharacterEncoding("utf-8");
-		HttpSession session = request.getSession();
-		MonHoc monHoc = (MonHoc) session.getAttribute("monHoc");
-		
-		ArrayList<CauHoi> dsTracNghiem = locCauHoi(monHoc.getDsCauHoi(), 1);
-		ArrayList<CauHoi> dsTuLuan = locCauHoi(monHoc.getDsCauHoi(), 2);
-
-		// DeThi deThi = (DeThi) session.getAttribute("deThi");
-		request.getRequestDispatcher("them-tu-dong.jsp").forward(request, response);
-	}
-
-	/**
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse
 	 *      response)
 	 */
@@ -66,148 +49,113 @@ public class ThemDeThiTuDong extends HttpServlet {
 		HttpSession session = request.getSession();
 		MonHoc monHoc = (MonHoc) session.getAttribute("monHoc");
 		DeThi deThi = (DeThi) session.getAttribute("deThi");
-		deThi.setTenDeThi("De thi " + monHoc.getTenMonHoc());
+		
 		String action = request.getParameter("action");
 
-		if (action.equals("getCauHoiList")) {
-			int type = Integer.parseInt(request.getParameter("type"));
-			response.getWriter().append(getCauHoiList(monHoc.getDsCauHoi(), type));
-		} else if (action.equals("getCauHoiInfo")) {
-			int index1 = Integer.parseInt(request.getParameter("index1"));
-			int index2 = Integer.parseInt(request.getParameter("index2"));
-			response.getWriter().append(getCauHoiInfo(monHoc, index1, index2));
-		} else if (action.equals("addToDeThi")) {
-			int index1 = Integer.parseInt(request.getParameter("index1"));
-			int index2 = Integer.parseInt(request.getParameter("index2"));
-			double diem = Double.parseDouble(request.getParameter("diem"));
-			this.chonVaoDeThi(deThi, monHoc, index1, index2, diem);
-
-		} else if (action.equals("getCauHoiDeThi")) {
-			response.getWriter().append(this.getCauHoiDeThi(deThi));
-		} else if (action.equals("getDeThi")) {
-			response.getWriter().append(deThi.inDeThi());
-		} else if (action.equals("xoaCauHoi")) {
-			int index = Integer.parseInt(request.getParameter("index"));
-			deThi.getDsCauHoi().remove(index);
-		} else if (action.equals("xaoTronCauHoi")) {
-			deThi.daoCauHoi();
-		} else if (action.equals("thayThe")) {
-			int index = Integer.parseInt(request.getParameter("index"));
-			deThi.getDsCauHoi().set(index, monHoc.timCauHoiTuongDuong(deThi.getDsCauHoi().get(index)));
-		} else if (action.equals("inRaFile")) {
-
-		} else if (action.equals("save")) {
-			deThi.setSoCauHoi(deThi.getDsCauHoi().size());
-
-			deThi.setNamHoc(request.getParameter("hocKi"));
-			deThi.setThoiGian(Integer.parseInt(request.getParameter("thoiGian")));
-			deThi.setKy(Integer.parseInt(request.getParameter("ki")));
-			QuanLyDeThi.themDeThi(deThi);
-			response.getWriter().append("Them de thi thanh cong");
-		} else if (action.equals("delete")) {
-			session.removeAttribute("deThi");
-			session.removeAttribute("monHoc");
+		if (action.equals("taoDeThi")) {
+			ArrayList<LinkedList<CauHoi>> dsCauHoi = (ArrayList<LinkedList<CauHoi>>) monHoc.getDsCauHoi().clone();
+			int doKho = Integer.parseInt(request.getParameter("doKho"));
+			locTheoDoKho(dsCauHoi, doKho);
+			int dangCauHoi = Integer.parseInt(request.getParameter("dangCauHoi"));
+			locDangCau(dsCauHoi, dangCauHoi);
+			int soCau = Integer.parseInt(request.getParameter("soCau"));
+			deThi.setDsCauHoi(taoDsCauHoi(dsCauHoi, soCau));
+			int sapXep = Integer.parseInt(request.getParameter("sapXep"));
+			
+			
+			if(sapXep == 0)
+				sapXepCauHoi(deThi.getDsCauHoi());
+			response.getWriter().append("tao de thi thanh cong");
 		}
-
 	}
 
-	protected String getCauHoiList(ArrayList<LinkedList<CauHoi>> listCauHoi, int type) {
-		JSONArray arr = new JSONArray();
-		for (int index1 = 0, sizeArr = listCauHoi.size(); index1 < sizeArr; index1++) {
-			LinkedList<CauHoi> list = listCauHoi.get(index1);
-			JSONObject obj = new JSONObject();
-			if (type == 1) {
-				for (int index2 = 0, size = list.size(); index2 < size; index2++) {
-					CauHoi cauHoi = list.get(index2);
-					if (cauHoi instanceof TracNghiem) {
-						obj.put("index1", index1);
-						obj.put("index2", index2);
-						obj.put("deBai", cauHoi.getDeBai());
-						arr.add(obj);
-						break;
-					}
+	//Them tu dong
+	
+	public static void locTheoDoKho(ArrayList<LinkedList<CauHoi>> dsCauHoi, int doKho){
+		if((doKho > 0) && (doKho < 6)) {
+			int size = dsCauHoi.size();
+			for (int i = size -1; i > -1; i-- ) {
+				LinkedList<CauHoi> list = dsCauHoi.get(i);
+				int listSize = list.size();
+				for(int j = listSize - 1; j > -1; j--){
+					if(list.get(j).getDoKho() != doKho)
+						list.remove(j);
 				}
-			} else if (type == 2) {
-				for (int index2 = 0, size = list.size(); index2 < size; index2++) {
-					CauHoi cauHoi = list.get(index2);
-					if (cauHoi instanceof TuLuan) {
-						obj.put("index1", index1);
-						obj.put("index2", index2);
-						obj.put("deBai", cauHoi.getDeBai());
-						arr.add(obj);
-						break;
-					}
-				}
-			} else {
-				obj.put("index1", index1);
-				obj.put("index2", new Integer(0));
-				obj.put("deBai", list.getFirst().getDeBai());
-				arr.add(obj);
+				if(list.isEmpty())
+					dsCauHoi.remove(i);
 			}
 		}
-		return arr.toJSONString();
 	}
 
-	protected String getCauHoiInfo(MonHoc monHoc, int i1, int i2) {
-		CauHoi cauHoi = monHoc.layCauHoi(i1, i2);
-		StringBuilder str = new StringBuilder();
-		str.append(cauHoi.inCauHoi()).append("\n");
-		str.append("Độ khó:").append(cauHoi.getDoKho()).append('\n');
-		str.append("Chương:").append(cauHoi.getChuong()).append('\n');
-
-		return str.toString();
-	}
-
-	protected void chonVaoDeThi(DeThi deThi, MonHoc monHoc, int index1, int index2, double diem) {
-		CauHoi cauHoi = monHoc.layCauHoi(index1, index2);
-		cauHoi.setDiem(diem);
-		deThi.getDsCauHoi().add(cauHoi);
-		LinkedList ls = monHoc.getDsCauHoi().get(index1);
-		ls.addFirst(ls.remove(index2));
-	}
-
-	protected String getCauHoiDeThi(DeThi deThi) {
-		JSONArray arr = new JSONArray();
-		ArrayList<CauHoi> list = deThi.getDsCauHoi();
-		for (int i = 0, size = list.size(); i < size; i++) {
-			JSONObject obj = new JSONObject();
-			obj.put("index", i);
-			obj.put("deBai", list.get(i).getDeBai());
-			arr.add(obj);
+	public static void locDangCau(ArrayList<LinkedList<CauHoi>> dsCauHoi, int dangCauHoi){
+		if(dangCauHoi == 1){
+			int size = dsCauHoi.size();
+			for (int i = size -1; i > -1; i-- ) {
+				LinkedList<CauHoi> list = dsCauHoi.get(i);
+				int listSize = list.size();
+				for(int j = listSize - 1; j > -1; j--){
+					if(!(list.get(j) instanceof TracNghiem))
+						list.remove(j);
+				}
+				if(list.isEmpty())
+					dsCauHoi.remove(i);
+			}
+		} else if(dangCauHoi == 2) {
+			int size = dsCauHoi.size();
+			for (int i = size -1; i > -1; i-- ) {
+				LinkedList<CauHoi> list = dsCauHoi.get(i);
+				int listSize = list.size();
+				for(int j = listSize - 1; j > -1; j--){
+					if(!(list.get(j) instanceof TuLuan))
+						list.remove(j);
+				}
+				if(list.isEmpty())
+					dsCauHoi.remove(i);
+			}
 		}
-		return arr.toJSONString();
 	}
 
-	
-	
-	
-	
-	protected static ArrayList<CauHoi> locCauHoi(ArrayList<LinkedList<CauHoi>> arrayList, int type) {
+	public static ArrayList<CauHoi> taoDsCauHoi(ArrayList<LinkedList<CauHoi>> dsCauHoi, int soCau){
 		ArrayList<CauHoi> returnList = new ArrayList<CauHoi>();
-		if (type == 1) {
-			for (LinkedList<CauHoi> ls : arrayList) {
-				for (CauHoi cauHoi : ls) {
-					if(cauHoi instanceof TracNghiem){
-						returnList.add(cauHoi);
-						break;
-					}
-				}
-			}
-		} else if(type == 2){
-			for (LinkedList<CauHoi> ls : arrayList) {
-				for (CauHoi cauHoi : ls) {
-					if(cauHoi instanceof TuLuan){
-						returnList.add(cauHoi);
-						break;
-					}
-				}
-			}
-		} else {
-			for (LinkedList<CauHoi> ls : arrayList) {
-				returnList.add(ls.getFirst());
-			}
+		ArrayList<LinkedList<CauHoi>> temp = (ArrayList<LinkedList<CauHoi>>) dsCauHoi.clone();
+		Random rd = new Random();
+		int size = dsCauHoi.size();
+		while((size > 0) && (soCau > 0)){
+			int index = rd.nextInt(size);
+			LinkedList<CauHoi> list = temp.get(index);
+			returnList.add(list.get(rd.nextInt(list.size())));
+			temp.remove(index);
+			size--; soCau--;
 		}
 		return returnList;
 	}
+
+	public static void sapXepCauHoi(ArrayList<CauHoi> dsCauHoi){
+		int size = dsCauHoi.size();
+		int i = 0, j = size - 1;
+		while(true){
+			while(i < size){
+				if(dsCauHoi.get(i) instanceof TuLuan)
+					break;
+				i++;
+			}
+			while(j > 0){
+				if(dsCauHoi.get(j) instanceof TracNghiem)
+					break;
+				j--;
+			}
+			if(i>j)
+				break;
+			else{
+				CauHoi temp = dsCauHoi.get(i);
+				dsCauHoi.set(i, dsCauHoi.get(j));
+				dsCauHoi.set(j, temp);
+			}
+		}
+	}
+	
+	
+	
+	
 	
 }

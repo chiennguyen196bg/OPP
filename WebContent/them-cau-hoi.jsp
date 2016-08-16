@@ -7,7 +7,7 @@
 <%@ page import="java.util.LinkedList" %>
 <%@ page import="java.util.ArrayList" %>
 
-<% MonHoc monHoc = (MonHoc) request.getAttribute("monHoc"); %>
+<% MonHoc monHoc = (MonHoc) session.getAttribute("monHoc"); %>
 <jsp:include page="/include/header.jsp" />
 <div class="content-wrapper">
 	<section class="content-header">
@@ -246,7 +246,7 @@
 			};
 			$http(req).then(function(response){
 				$scope.message = response.data;
-				// $window.open("danh-sach-cau-hoi","_self");
+				$window.open("danh-sach-cau-hoi","_self");
 			}, function(response){
 				$scope.message = "error";
 			});

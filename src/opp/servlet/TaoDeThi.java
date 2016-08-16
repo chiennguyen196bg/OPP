@@ -1,7 +1,9 @@
 package opp.servlet;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.LinkedList;
+import java.util.Random;
 
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
@@ -11,8 +13,15 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+
+import opp.model.CauHoi;
 import opp.model.DeThi;
 import opp.model.MonHoc;
+import opp.model.TracNghiem;
+import opp.model.TuLuan;
+import opp.quanly.QuanLyDeThi;
 import opp.quanly.QuanLyMonHoc;
 
 /**
@@ -45,31 +54,79 @@ public class TaoDeThi extends HttpServlet {
 		
 		HttpSession session = request.getSession(true);
 		
-		// lay list mon hoc
-		ServletContext app = getServletConfig().getServletContext();
-		LinkedList<MonHoc> listMonHoc = (LinkedList<MonHoc>) app.getAttribute("listMonHoc");
-		if (listMonHoc == null) {
-			listMonHoc = new LinkedList<MonHoc>();
-			app.setAttribute("listMonHoc", listMonHoc);
-		}
-
-		// lay mon hoc.
-		QuanLyMonHoc ql = new QuanLyMonHoc(listMonHoc);
-		MonHoc monHoc = ql.layMonHoc(maHocPhan);
-
-		try {
-			MonHoc monHocClone = (MonHoc) monHoc.clone();
-			session.setAttribute("monHoc", monHocClone);
-			session.setAttribute("deThi", new DeThi());
+		MonHoc monHoc = QuanLyMonHoc.layMonHoc(maHocPhan);
+		DeThi deThi = new DeThi();
+		deThi.setTenDeThi("Đề thi môn " + monHoc.getTenMonHoc());
+		
+			session.setAttribute("monHoc", monHoc);
+			session.setAttribute("deThi", deThi);
 			if (taoDeThi.equals("bangTay"))
-				response.sendRedirect("them-bang-tay");
+				request.getRequestDispatcher("them-bang-tay.jsp").forward(request, response);
 			else
-				response.sendRedirect("them-tu-dong");
-		} catch (CloneNotSupportedException e) {
-			response.sendRedirect("danh-sach-de-thi");
-			e.printStackTrace();
+				request.getRequestDispatcher("them-tu-dong.jsp").forward(request, response);
+	}
+	
+	
+	
+	
+	
+	protected void doPost(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+		response.setContentType("text/html;charset=UTF-8");
+		request.setCharacterEncoding("utf-8");
+
+		HttpSession session = request.getSession();
+		MonHoc monHoc = (MonHoc) session.getAttribute("monHoc");
+		DeThi deThi = (DeThi) session.getAttribute("deThi");
+		
+		QuanLyMonHoc qlMonHoc = new QuanLyMonHoc(monHoc);
+		QuanLyDeThi qlDeThi = new QuanLyDeThi(deThi);
+		
+		String action = request.getParameter("action");
+
+		
+		if (action.equals("getCauHoiDeThi")) {
+			response.getWriter().append(this.getCauHoiDeThi(deThi));
+		} else if (action.equals("getDeThi")) {
+			response.getWriter().append(qlDeThi.inDeThi());
+		} else if (action.equals("xoaCauHoi")) {
+			int index = Integer.parseInt(request.getParameter("index"));
+			deThi.getDsCauHoi().remove(index);
+		} else if (action.equals("xaoTronCauHoi")) {
+			qlDeThi.daoCauHoi();
+		} else if (action.equals("thayThe")) {
+			int index = Integer.parseInt(request.getParameter("index"));
+			CauHoi cauHoi = deThi.getDsCauHoi().get(index);
+			CauHoi tuongDuong = qlMonHoc.timCauHoiTuongDuong(cauHoi);
+			tuongDuong.setDiem(cauHoi.getDiem());
+			deThi.getDsCauHoi().set(index, tuongDuong);
+		} else if (action.equals("inRaFile")) {
+
+		} else if (action.equals("save")) {
+			deThi.setSoCauHoi(deThi.getDsCauHoi().size());
+
+			deThi.setNamHoc(request.getParameter("hocKi"));
+			deThi.setThoiGian(Integer.parseInt(request.getParameter("thoiGian")));
+			deThi.setKy(Integer.parseInt(request.getParameter("ki")));
+			QuanLyDeThi.themDeThi(deThi);
+			response.getWriter().append("Them de thi thanh cong");
+		} else if (action.equals("delete")) {
+			session.removeAttribute("deThi");
+			session.removeAttribute("monHoc");
 		}
 
+	}
+
+	protected String getCauHoiDeThi(DeThi deThi) {
+		JSONArray arr = new JSONArray();
+		ArrayList<CauHoi> list = deThi.getDsCauHoi();
+		for (int i = 0, size = list.size(); i < size; i++) {
+			JSONObject obj = new JSONObject();
+			obj.put("index", i);
+			obj.put("deBai", list.get(i).getDeBai());
+			arr.add(obj);
+		}
+		return arr.toJSONString();
 	}
 
 }

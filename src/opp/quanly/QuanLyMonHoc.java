@@ -7,20 +7,25 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.Properties;
 
+import opp.model.CauHoi;
 import opp.model.MonHoc;
+import opp.model.TracNghiem;
+import opp.model.TuLuan;
 
 public class QuanLyMonHoc {
-	private LinkedList<MonHoc> listMonHoc;
+
 	private final static String WORKING_DIR = "D:/WorkSpace/JavaEE/OPP/src/data/mon_hoc/";
 	private final static int MAX_SIZE = 6;
-
-	public QuanLyMonHoc(LinkedList<MonHoc> list) {
-		this.listMonHoc = list;
+	private MonHoc monHoc;
+	
+	public QuanLyMonHoc(MonHoc monHoc){
+		this.monHoc = monHoc;
 	}
-
+	
 	public static boolean themMonHoc(MonHoc mh) {
 		Properties p = new Properties();
 		try {
@@ -38,32 +43,18 @@ public class QuanLyMonHoc {
 		return true;
 	}
 
-	public MonHoc layMonHoc(String maHocPhan) {
-		MonHoc mh;
-		// neu mon hoc co trong list
-		for (int num = 0, size = listMonHoc.size(); num < size; num++) {
-			mh = listMonHoc.get(num);
-			if ((mh.getMaHocPhan()).equals(maHocPhan)) {
-				if (num > 0) {
-					listMonHoc.addFirst(listMonHoc.remove(num));
-				}
-				return mh;
-			}
-		}
-		// neu mon hoc khong co trong list
+	public static MonHoc layMonHoc(String maHocPhan) {
 		try {
-			mh = readFromFile(maHocPhan);
-			listMonHoc.addFirst(mh);
-			if (listMonHoc.size() > MAX_SIZE)
-				saveToFile(listMonHoc.removeLast());
+			MonHoc mh = readFromFile(maHocPhan);
+			return mh;
 		} catch (ClassNotFoundException | IOException e) {
 			e.printStackTrace();
 			return null;
 		}
-		return mh;
+		
 	}
 
-	public void suaMonHoc(String maHocPhan, MonHoc mh) {
+	public static void suaMonHoc(String maHocPhan, MonHoc mh) {
 		try {
 			xoaMonHoc(maHocPhan);
 			themMonHoc(mh);
@@ -72,7 +63,7 @@ public class QuanLyMonHoc {
 		}
 	}
 
-	public void xoaMonHoc(String maHocPhan) throws FileNotFoundException, IOException {
+	public static void xoaMonHoc(String maHocPhan) throws FileNotFoundException, IOException {
 		// xoa o properties
 		Properties p = new Properties();
 		p.load(new FileInputStream(WORKING_DIR + "list.properties"));
@@ -82,11 +73,6 @@ public class QuanLyMonHoc {
 		// xoa file
 		(new File(WORKING_DIR + maHocPhan + ".dat")).delete();
 
-		// xoa trong list
-		for (int num = 0, size = listMonHoc.size(); num < size; num++) {
-			if (listMonHoc.get(num).getMaHocPhan().equals(maHocPhan))
-				listMonHoc.remove(num);
-		}
 	}
 
 	
@@ -100,8 +86,74 @@ public class QuanLyMonHoc {
 		}
 		return p;
 	}
+	
+	public void themCauHoi(CauHoi cauHoi) {
+		LinkedList<CauHoi> linkedList = new LinkedList<CauHoi>();
+		linkedList.add(cauHoi);
+		this.monHoc.getDsCauHoi().add(linkedList);
+	}
 
-	protected static boolean saveToFile(MonHoc mh) throws IOException {
+	public void themCauHoiTuongDuong(int index, CauHoi cauHoi) {
+		this.monHoc.getDsCauHoi().get(index).add(cauHoi);
+	}
+
+	public void xoaCauHoi(int index1, int index2) {
+		LinkedList<CauHoi> ls = this.monHoc.getDsCauHoi().get(index1);
+		ls.remove(index2);
+		if (ls.isEmpty())
+			this.monHoc.getDsCauHoi().remove(index1);
+	}
+
+	public void suaCauHoi(int index1, int index2, CauHoi cauHoi) {
+		LinkedList<CauHoi> ls = this.monHoc.getDsCauHoi().get(index1);
+		ls.set(index2, cauHoi);
+	}
+
+	public CauHoi layCauHoi(int index1, int index2) {
+		return this.monHoc.getDsCauHoi().get(index1).get(index2);
+	}
+	
+	
+	public CauHoi timCauHoiTuongDuong(CauHoi cauHoi) {
+		for (int i = 0, size = monHoc.getDsCauHoi().size(); i < size; i++) {
+			LinkedList<CauHoi> list = monHoc.getDsCauHoi().get(i);
+			int index = list.indexOf(cauHoi);
+			if (index > -1)
+				return list.get((index + 1) % (list.size()));
+		}
+		return cauHoi;
+	}
+	
+	public ArrayList<CauHoi> locCauHoi(int type) {
+		ArrayList<CauHoi> returnList = new ArrayList<CauHoi>();
+		if (type == 1) {
+			for (LinkedList<CauHoi> ls : monHoc.getDsCauHoi()) {
+				for (CauHoi cauHoi : ls) {
+					if(cauHoi instanceof TracNghiem){
+						returnList.add(cauHoi);
+						break;
+					}
+				}
+			}
+		} else if(type == 2){
+			for (LinkedList<CauHoi> ls : monHoc.getDsCauHoi()) {
+				for (CauHoi cauHoi : ls) {
+					if(cauHoi instanceof TuLuan){
+						returnList.add(cauHoi);
+						break;
+					}
+				}
+			}
+		} else {
+			for (LinkedList<CauHoi> ls : monHoc.getDsCauHoi()) {
+				returnList.add(ls.getFirst());
+			}
+		}
+		return returnList;
+	}
+	
+
+	public static boolean saveToFile(MonHoc mh) throws IOException {
 		FileOutputStream f;
 		f = new FileOutputStream(WORKING_DIR + mh.getMaHocPhan() + ".dat");
 		ObjectOutputStream oStream = new ObjectOutputStream(f);

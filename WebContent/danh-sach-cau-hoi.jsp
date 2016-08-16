@@ -10,7 +10,7 @@
 
 
 <%
-	MonHoc monHoc = (MonHoc) request.getAttribute("monHoc");
+	MonHoc monHoc = (MonHoc) session.getAttribute("monHoc");
 	ArrayList<LinkedList<CauHoi>> dsCauHoi = monHoc.getDsCauHoi();
 %>
 

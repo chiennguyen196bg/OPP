@@ -53,23 +53,33 @@ public class ThemDeThiTuDong extends HttpServlet {
 		String action = request.getParameter("action");
 
 		if (action.equals("taoDeThi")) {
-			ArrayList<LinkedList<CauHoi>> dsCauHoi = (ArrayList<LinkedList<CauHoi>>) monHoc.getDsCauHoi().clone();
+			ArrayList<LinkedList<CauHoi>> dsCauHoiClone = cloneDs(monHoc.getDsCauHoi());
+			
 			int doKho = Integer.parseInt(request.getParameter("doKho"));
-			locTheoDoKho(dsCauHoi, doKho);
+			locTheoDoKho(dsCauHoiClone, doKho);
+			
 			int dangCauHoi = Integer.parseInt(request.getParameter("dangCauHoi"));
-			locDangCau(dsCauHoi, dangCauHoi);
+			locDangCau(dsCauHoiClone, dangCauHoi);
+			
 			int soCau = Integer.parseInt(request.getParameter("soCau"));
-			deThi.setDsCauHoi(taoDsCauHoi(dsCauHoi, soCau));
+			deThi.setDsCauHoi(taoDsCauHoi(dsCauHoiClone, soCau));
 			int sapXep = Integer.parseInt(request.getParameter("sapXep"));
-			
-			
 			if(sapXep == 0)
 				sapXepCauHoi(deThi.getDsCauHoi());
 			response.getWriter().append("tao de thi thanh cong");
+		
 		}
 	}
 
 	//Them tu dong
+	
+	public static ArrayList<LinkedList<CauHoi>> cloneDs(ArrayList<LinkedList<CauHoi>> dsCauHoi){
+		ArrayList<LinkedList<CauHoi>> dsClone = new ArrayList<LinkedList<CauHoi>>(dsCauHoi.size());
+		for(LinkedList<CauHoi> list : dsCauHoi){
+			dsClone.add((LinkedList<CauHoi>) list.clone());
+		}
+		return dsClone;
+	}
 	
 	public static void locTheoDoKho(ArrayList<LinkedList<CauHoi>> dsCauHoi, int doKho){
 		if((doKho > 0) && (doKho < 6)) {
@@ -117,14 +127,14 @@ public class ThemDeThiTuDong extends HttpServlet {
 
 	public static ArrayList<CauHoi> taoDsCauHoi(ArrayList<LinkedList<CauHoi>> dsCauHoi, int soCau){
 		ArrayList<CauHoi> returnList = new ArrayList<CauHoi>();
-		ArrayList<LinkedList<CauHoi>> temp = (ArrayList<LinkedList<CauHoi>>) dsCauHoi.clone();
 		Random rd = new Random();
 		int size = dsCauHoi.size();
 		while((size > 0) && (soCau > 0)){
 			int index = rd.nextInt(size);
-			LinkedList<CauHoi> list = temp.get(index);
-			returnList.add(list.get(rd.nextInt(list.size())));
-			temp.remove(index);
+			LinkedList<CauHoi> list = dsCauHoi.get(index);
+			int listSize = list.size();
+			returnList.add(list.get(rd.nextInt(listSize)));
+			dsCauHoi.remove(index);
 			size--; soCau--;
 		}
 		return returnList;
@@ -154,7 +164,13 @@ public class ThemDeThiTuDong extends HttpServlet {
 		}
 	}
 	
-	
+	public static int sum(ArrayList<LinkedList<CauHoi>> dsCauHoi){
+		int sum = 0;
+		for(LinkedList<CauHoi> list : dsCauHoi){
+			sum +=list.size();
+		}
+		return sum;
+	}
 	
 	
 	

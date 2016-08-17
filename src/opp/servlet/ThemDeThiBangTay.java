@@ -20,6 +20,7 @@ import opp.model.MonHoc;
 import opp.model.TracNghiem;
 import opp.model.TuLuan;
 import opp.quanly.QuanLyCauHoi;
+import opp.quanly.QuanLyDeThi;
 import opp.quanly.QuanLyMonHoc;
 
 /**
@@ -49,6 +50,7 @@ public class ThemDeThiBangTay extends HttpServlet {
 		MonHoc monHoc = (MonHoc) session.getAttribute("monHoc");
 		DeThi deThi = (DeThi) session.getAttribute("deThi");
 		
+		
 		String action = request.getParameter("action");
 		
 		if(action.equals("getCauHoiList")){
@@ -62,13 +64,13 @@ public class ThemDeThiBangTay extends HttpServlet {
 			int index1 = Integer.parseInt(request.getParameter("index1"));
 			int index2 = Integer.parseInt(request.getParameter("index2"));
 			double diem = Double.parseDouble(request.getParameter("diem"));
-			this.chonVaoDeThi(deThi, monHoc, index1, index2, diem);
+			chonVaoDeThi(deThi, monHoc, index1, index2, diem);
 			
 		}
 		
 	}
 	
-	protected String getCauHoiList(ArrayList<LinkedList<CauHoi>> listCauHoi, int type){
+	protected static String getCauHoiList(ArrayList<LinkedList<CauHoi>> listCauHoi, int type){
 		JSONArray arr = new JSONArray();
 		for(int index1 = 0, sizeArr = listCauHoi.size(); index1 < sizeArr; index1 ++){
 			LinkedList<CauHoi> list = listCauHoi.get(index1);
@@ -105,7 +107,7 @@ public class ThemDeThiBangTay extends HttpServlet {
 		return arr.toJSONString();
 	}
 	
-	protected String getCauHoiInfo(MonHoc monHoc, int i1, int i2){
+	protected static StringBuilder getCauHoiInfo(MonHoc monHoc, int i1, int i2){
 		QuanLyMonHoc ql = new QuanLyMonHoc(monHoc);
 		CauHoi cauHoi = ql.layCauHoi(i1, i2);
 		QuanLyCauHoi qlCauHoi = new QuanLyCauHoi(cauHoi);
@@ -113,18 +115,14 @@ public class ThemDeThiBangTay extends HttpServlet {
 		str.append(qlCauHoi.inCauHoi()).append("\n");
 		str.append("Độ khó:").append(cauHoi.getDoKho()).append('\n');
 		str.append("Chương:").append(cauHoi.getChuong()).append('\n');
-		
-		return str.toString();
+		return str;
 	}
 	
-	protected void chonVaoDeThi(DeThi deThi, MonHoc monHoc, int index1, int index2, double diem){
+	protected static void chonVaoDeThi(DeThi deThi, MonHoc monHoc, int index1, int index2, double diem){
 		QuanLyMonHoc ql = new QuanLyMonHoc(monHoc);
 		CauHoi cauHoi = ql.layCauHoi(index1, index2);
 		cauHoi.setDiem(diem);
-		deThi.getDsCauHoi().add(cauHoi);
-		LinkedList ls = monHoc.getDsCauHoi().get(index1);
-		ls.addFirst(ls.remove(index2));
+		QuanLyDeThi qlDeThi = new QuanLyDeThi(deThi);
+		qlDeThi.themCauHoi(cauHoi);
 	}
-	
-
 }

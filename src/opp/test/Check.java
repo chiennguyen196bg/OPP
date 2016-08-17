@@ -2,17 +2,18 @@ package opp.test;
 
 import java.io.BufferedReader;
 
-import opp.model.CauHoi;
-import opp.model.DapAn;
-import opp.model.DeThi;
-import opp.model.TracNghiem;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
+
+import com.google.gson.Gson;
 
 public class Check {
 
 	private static BufferedReader in;
 
-	public static void main(String[] args) throws CloneNotSupportedException {
-//		Gson gson = new Gson();
+	public static void main(String[] args) throws CloneNotSupportedException, ParseException {
+		Gson gson = new Gson();
 		// MonHoc monHoc = new MonHoc("it3020", "Lập Trình C");
 		// monHoc.setSoChuong(4);
 		// TracNghiem ch1 = new TracNghiem();
@@ -79,21 +80,26 @@ public class Check {
 //		
 //		System.out.println(deThi.inDeThi());
 		
-		DeThi deThi = new DeThi();
-		TracNghiem tracNghiem = new TracNghiem();
-		DapAn da1 = new DapAn();
-		da1.setNoiDung("dap an 1");
-		DapAn da2 = new DapAn();
-		da2.setNoiDung("dap an 2");
-		DapAn da3 = new DapAn();
-		da3.setNoiDung("dap an 3");
-		tracNghiem.setCoTheDaoDapAn(true);
-		tracNghiem.getDsDapAn().add(da1);
-		tracNghiem.getDsDapAn().add(da2);
-		tracNghiem.getDsDapAn().add(da3);
-		for(DapAn x : tracNghiem.getDsDapAn()){
-			System.out.println(x.getNoiDung());
-		}
+//		DeThi deThi = new DeThi();
+//		TracNghiem tracNghiem = new TracNghiem();
+//		DapAn da1 = new DapAn();
+//		da1.setNoiDung("dap an 1");
+//		DapAn da2 = new DapAn();
+//		da2.setNoiDung("dap an 2");
+//		DapAn da3 = new DapAn();
+//		da3.setNoiDung("dap an 3");
+//		tracNghiem.setCoTheDaoDapAn(true);
+//		tracNghiem.getDsDapAn().add(da1);
+//		tracNghiem.getDsDapAn().add(da2);
+//		tracNghiem.getDsDapAn().add(da3);
+//		for(DapAn x : tracNghiem.getDsDapAn()){
+//			System.out.println(x.getNoiDung());
+//		}
+		String test = "{ \"0\": { \"0\": true, \"3\": true } }";
+		JSONParser parser = new JSONParser();
+		JSONObject obj = (JSONObject) parser.parse(test);
+		int i = 2;
+		System.out.println();
 	}
 	
 	

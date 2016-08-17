@@ -51,25 +51,21 @@ public class TaoDeThi extends HttpServlet {
 
 		String maHocPhan = request.getParameter("maHocPhan");
 		String taoDeThi = request.getParameter("taoDeThi");
-		
+
 		HttpSession session = request.getSession(true);
-		
+
 		MonHoc monHoc = QuanLyMonHoc.layMonHoc(maHocPhan);
 		DeThi deThi = new DeThi();
 		deThi.setTenDeThi("Đề thi môn " + monHoc.getTenMonHoc());
-		
-			session.setAttribute("monHoc", monHoc);
-			session.setAttribute("deThi", deThi);
-			if (taoDeThi.equals("bangTay"))
-				request.getRequestDispatcher("them-bang-tay.jsp").forward(request, response);
-			else
-				request.getRequestDispatcher("them-tu-dong.jsp").forward(request, response);
+
+		session.setAttribute("monHoc", monHoc);
+		session.setAttribute("deThi", deThi);
+		if (taoDeThi.equals("bangTay"))
+			request.getRequestDispatcher("them-bang-tay.jsp").forward(request, response);
+		else
+			request.getRequestDispatcher("them-tu-dong.jsp").forward(request, response);
 	}
-	
-	
-	
-	
-	
+
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		response.setContentType("text/html;charset=UTF-8");
@@ -78,12 +74,13 @@ public class TaoDeThi extends HttpServlet {
 		HttpSession session = request.getSession();
 		MonHoc monHoc = (MonHoc) session.getAttribute("monHoc");
 		DeThi deThi = (DeThi) session.getAttribute("deThi");
-		
+
 		QuanLyMonHoc qlMonHoc = new QuanLyMonHoc(monHoc);
 		QuanLyDeThi qlDeThi = new QuanLyDeThi(deThi);
-		
+
 		String action = request.getParameter("action");
 
+		
 		
 		if (action.equals("getCauHoiDeThi")) {
 			response.getWriter().append(this.getCauHoiDeThi(deThi));
@@ -91,7 +88,7 @@ public class TaoDeThi extends HttpServlet {
 			response.getWriter().append(qlDeThi.inDeThi());
 		} else if (action.equals("xoaCauHoi")) {
 			int index = Integer.parseInt(request.getParameter("index"));
-			deThi.getDsCauHoi().remove(index);
+			qlDeThi.xoaCauHoi(index);
 		} else if (action.equals("xaoTronCauHoi")) {
 			qlDeThi.daoCauHoi();
 		} else if (action.equals("thayThe")) {

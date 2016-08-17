@@ -10,13 +10,11 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.util.LinkedList;
 import java.util.Properties;
 
 import opp.model.CauHoi;
 import opp.model.DeThi;
 import opp.utils.Utils;
-import opp.model.DeThi;
 
 public class QuanLyDeThi {
 	private final static String WORKING_DIR = "D:/WorkSpace/JavaEE/OPP/src/data/de_thi/";
@@ -104,13 +102,28 @@ public class QuanLyDeThi {
 	public StringBuilder inDeThi(){
 		StringBuilder str = new StringBuilder();
 		str.append(deThi.getTenDeThi()).append("\n");
-		str.append("Kỳ: ").append(deThi.getKy()).append("Năm học: ").append(deThi.getNamHoc()).append("\n");
+		str.append("Kỳ: ").append(deThi.getKy()).append(" Năm học: ").append(deThi.getNamHoc()).append("\n");
 		for(int i = 0, size = deThi.getDsCauHoi().size(); i < size ; i++){
 			CauHoi cauHoi = deThi.getDsCauHoi().get(i);
-			str.append("Câu ").append(i+1).append(" (").append(cauHoi.getDiem()).append(") \n");
-			str.append(cauHoi.getDeBai()).append("\n");
+			QuanLyCauHoi qlCauHoi = new QuanLyCauHoi(cauHoi);
+			str.append("Câu ").append(i+1).append(" (").append(cauHoi.getDiem()).append(" điểm)").append("\n");
+			str.append(qlCauHoi.inCauHoi());
 		}
 		return str;
+	}
+	
+	public void themCauHoi(CauHoi cauHoi){
+		deThi.getDsCauHoi().add(cauHoi);
+		double tongDiem = deThi.getTongDiem();
+		tongDiem += cauHoi.getDiem();
+		deThi.setTongDiem(tongDiem);
+	}
+	
+	public void xoaCauHoi(int index){
+		CauHoi cauHoi = deThi.getDsCauHoi().remove(index);
+		double tongDiem = deThi.getTongDiem();
+		tongDiem -= cauHoi.getDiem();
+		deThi.setTongDiem(tongDiem);
 	}
 	
 	

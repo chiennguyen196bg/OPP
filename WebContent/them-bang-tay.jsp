@@ -49,7 +49,7 @@
 													</div>
 													<div class="col-md-7">
 														<div>
-															<textarea ng-bind="cauHoiInfo" cols="40" rows="6" class="textarea" style="width:100%;font-size:14px;line-height:18px;border:1px solid rgb(221,221,221);padding:10px"></textarea>
+															<textarea ng-bind="cauHoiInfo" cols="40" rows="6" readonly class="textarea" style="width:100%;font-size:14px;line-height:18px;border:1px solid rgb(221,221,221);padding:10px"></textarea>
 														</div>
 														<div style="padding: 5px; overflow: auto;" class="inline">
 															<p>Điểm cho câu hỏi <input type="number" ng-model="diem" ng-value="diem" step="0.5"></p>
@@ -84,7 +84,7 @@
 											<div>
 												<div class="form-group">
 													<label class="col-sm-2 control-label">Thời gian</label>
-													<div class="col-sm-4"><input type="text" ng-model="thoiGian" class="form-control" /></div>
+													<div class="col-sm-4"><input type="number" ng-model="thoiGian" class="form-control" /></div>
 													
 												</div>
 												<div class="form-group">
@@ -104,8 +104,9 @@
 										</div>
 										<div class="col-md-7">
 											<div>
-												<textarea ng-bind="deThi" cols="40" rows="6" class="form-control" style="width:100%;font-size:14px;line-height:18px;border:1px solid rgb(221,221,221);padding:10px"></textarea>
+												<textarea ng-bind="deThi" cols="40" rows="6" readonly class="form-control" style="width:100%;font-size:14px;line-height:18px;border:1px solid rgb(221,221,221);padding:10px"></textarea>
 											</div>
+											<button name="update" ng-click="daoCauHoi();getCauHoiDeThi();getDeThi()" class="btn btn-info">Đảo câu hỏi</button>
 											
 										</div>
 									</div>
@@ -306,6 +307,23 @@
 				headers: {'Content-Type': 'application/x-www-form-urlencoded'},
 				data : $.param({
 					action: "delete"
+				})
+			};
+			$http(req).then(function(response){
+				$scope.message = response.data;
+			}, function(response){
+				$scope.message = "error";
+			});
+		};
+
+		$scope.daoCauHoi = function(){
+			var index = $scope.listCauHoi.index;
+			var req = {
+				method : 'POST',
+				url : 'tao-de-thi',
+				headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+				data : $.param({
+					action: "xaoTronCauHoi",
 				})
 			};
 			$http(req).then(function(response){

@@ -119,7 +119,7 @@
 											<div>
 												<div class="form-group">
 													<label class="col-sm-2 control-label">Thời gian</label>
-													<div class="col-sm-4"><input type="text" ng-model="thoiGian" class="form-control" /></div>
+													<div class="col-sm-4"><input type="number" ng-model="thoiGian" class="form-control" /></div>
 													
 												</div>
 												<div class="form-group">
@@ -139,9 +139,9 @@
 										</div>
 										<div class="col-md-7">
 											<div>
-												<textarea ng-bind="deThi" cols="40" rows="6" class="form-control" style="width:100%;font-size:14px;line-height:18px;border:1px solid rgb(221,221,221);padding:10px"></textarea>
+												<textarea ng-bind="deThi" cols="40" rows="6" class="form-control" readonly style="width:100%;font-size:14px;line-height:18px;border:1px solid rgb(221,221,221);padding:10px"></textarea>
 											</div>
-											
+											<button name="update" ng-click="daoCauHoi();getCauHoiDeThi();getDeThi()" class="btn btn-info">Đảo câu hỏi</button>
 										</div>
 									</div>
 									<div class="box-footer">
@@ -182,6 +182,11 @@
 		};
 		$scope.deThi = "";
 		
+		$scope.doKho = "0";
+		$scope.dangCauHoi = "0";
+		$scope.soCau = 1;
+		$scope.sapXep = "0";
+
 
 		$scope.select = function($index){
 			$scope.listCauHoi.index = $index;
@@ -311,6 +316,23 @@
 				$scope.message = "error";
 			});
 			
+		};
+
+		$scope.daoCauHoi = function(){
+			var index = $scope.listCauHoi.index;
+			var req = {
+				method : 'POST',
+				url : 'tao-de-thi',
+				headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+				data : $.param({
+					action: "xaoTronCauHoi",
+				})
+			};
+			$http(req).then(function(response){
+				$scope.message = response.data;
+			}, function(response){
+				$scope.message = "error";
+			});
 		};
 		
 	});

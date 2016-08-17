@@ -17,7 +17,7 @@ public class DeThi implements Serializable {
 	private ArrayList<CauHoi> dsCauHoi;
 	
 	public DeThi(){
-		this.maDeThi = Long.toString((new Date()).getTime());
+		this.maDeThi = Long.toString((new Date()).getTime());// lỗi ở đây
 		this.dsCauHoi = new ArrayList<CauHoi>();
 	}
 	

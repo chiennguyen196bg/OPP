@@ -38,6 +38,8 @@ public class DanhGiaKetQua extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		response.setContentType("text/html;charset=UTF-8");
+		request.setCharacterEncoding("utf-8");
 		HttpSession session = request.getSession();
 		DeThi deThi = (DeThi) session.getAttribute("deThi");
 		String answer = (String) session.getAttribute("answer");
@@ -54,13 +56,6 @@ public class DanhGiaKetQua extends HttpServlet {
 		
 	}
 
-	/**
-	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
-	 */
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		
-	}
-	
 	public static ArrayList<CauHoi> timSoCauTraLoiDung(ArrayList<CauHoi> dsCauHoi, String answer) throws ParseException{
 		ArrayList<CauHoi> returnList = new ArrayList<CauHoi>();
 		JSONParser parser = new JSONParser();

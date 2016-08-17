@@ -31,7 +31,8 @@ public class LamDeThi extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
+		response.setContentType("text/html;charset=UTF-8");
+		request.setCharacterEncoding("utf-8");
 		String maDeThi = request.getParameter("maDeThi");
 		if(maDeThi == null){
 			response.sendRedirect("chon-de-thi");
@@ -48,6 +49,8 @@ public class LamDeThi extends HttpServlet {
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		response.setContentType("text/html;charset=UTF-8");
+		request.setCharacterEncoding("utf-8");
 		HttpSession session = request.getSession();
 		String answer = request.getParameter("answer");
 		session.setAttribute("answer", answer);

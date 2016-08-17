@@ -12,9 +12,6 @@
 
 
 <jsp:include page="/include/header.jsp" />
-
-
-
 <%
 	Properties p = QuanLyMonHoc.getProperties();
 	session.invalidate();
@@ -31,7 +28,7 @@
 						<div class="col-md-6 col-md-offset-3">
 							<button type="button" class="btn btn-default btn-block" data-toggle="modal" data-target="#myModal" ng-click="link = 'danh-sach-cau-hoi'">Soạn câu hỏi</button>
 							<a href="danh-sach-de-thi" class="btn btn-default btn-block">Xây dựng đề thi</a>
-							<button type="button" class="btn btn-default btn-block" data-toggle="modal" data-target="#myModal" ng-click="link = '/danh-sach-cau-hoi.html'">Button 1</button>
+							<a href="chon-de-thi"  class="btn btn-default btn-block">Làm bài thi thử</a>
 						</div>
 					</div>
 					
@@ -70,7 +67,6 @@
 <%@ include file="/include/footer.jsp"%>
 
 <script>
-	
 	app.controller('myCtrl', function($scope, $http, $window, $location) {
 		// $scope.maMonHoc == "it2030";
 		// $scope.check = $scope.maMonHoc == null;

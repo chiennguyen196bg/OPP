@@ -34,11 +34,11 @@
 															<input ng-model="dangCauHoi" type="radio" name="optradio" value="2">Tự luận
 															</label>
 															<label class="radio-inline">
-															<input ng-model="dangCauHoi" type="radio" name="optradio" value="0">Cả hai
+															<input ng-model="dangCauHoi" type="radio"  name="optradio" value="0">Cả hai
 															</label>
 														</div>
 													</div>
-													<div class="form-group">
+													<div class="form-group" ng-show="dangCauHoi == 0">
 														<label for="kiHoc" class="col-md-4">Hình thức:</label>
 														<div class="col-md-6">
 															<label class="radio-inline">
@@ -276,6 +276,7 @@
 			};
 			$http(req).then(function(response){
 				$scope.message = response.data;
+				$window.open("danh-sach-de-thi", "_self");
 			}, function(response){
 				$scope.message = "error";
 			});
@@ -319,7 +320,6 @@
 		};
 
 		$scope.daoCauHoi = function(){
-			var index = $scope.listCauHoi.index;
 			var req = {
 				method : 'POST',
 				url : 'tao-de-thi',

@@ -296,6 +296,7 @@
 			};
 			$http(req).then(function(response){
 				$scope.message = response.data;
+				$window.open("danh-sach-de-thi", "_self");
 			}, function(response){
 				$scope.message = "error";
 			});
@@ -317,7 +318,6 @@
 		};
 
 		$scope.daoCauHoi = function(){
-			var index = $scope.listCauHoi.index;
 			var req = {
 				method : 'POST',
 				url : 'tao-de-thi',

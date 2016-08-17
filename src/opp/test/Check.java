@@ -95,11 +95,8 @@ public class Check {
 //		for(DapAn x : tracNghiem.getDsDapAn()){
 //			System.out.println(x.getNoiDung());
 //		}
-		String test = "{ \"0\": { \"0\": true, \"3\": true } }";
-		JSONParser parser = new JSONParser();
-		JSONObject obj = (JSONObject) parser.parse(test);
-		int i = 2;
-		System.out.println();
+		 System.out.println("Working Directory = " +
+	              System.getProperty("user.dir"));
 	}
 	
 	

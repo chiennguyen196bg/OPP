@@ -18,8 +18,7 @@ import opp.model.TuLuan;
 
 public class QuanLyMonHoc {
 
-	private final static String WORKING_DIR = "D:/WorkSpace/JavaEE/OPP/src/data/mon_hoc/";
-	private final static int MAX_SIZE = 6;
+	private static String WORKING_DIR = "C:/data/mon_hoc/";
 	private MonHoc monHoc;
 	
 	public QuanLyMonHoc(MonHoc monHoc){

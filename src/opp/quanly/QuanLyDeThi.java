@@ -7,9 +7,11 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.io.Writer;
 import java.util.Properties;
 
 import opp.model.CauHoi;
@@ -17,7 +19,8 @@ import opp.model.DeThi;
 import opp.utils.Utils;
 
 public class QuanLyDeThi {
-	private final static String WORKING_DIR = "D:/WorkSpace/JavaEE/OPP/src/data/de_thi/";
+	
+	private static String WORKING_DIR = "C:/data/de_thi/";
 	private DeThi deThi;
 	
 	public QuanLyDeThi(DeThi deThi){
@@ -101,13 +104,14 @@ public class QuanLyDeThi {
 	
 	public StringBuilder inDeThi(){
 		StringBuilder str = new StringBuilder();
-		str.append(deThi.getTenDeThi()).append("\n");
-		str.append("Kỳ: ").append(deThi.getKy()).append(" Năm học: ").append(deThi.getNamHoc()).append("\n");
+		str.append(deThi.getTenDeThi()).append("\r\n");
+		str.append("Kỳ: ").append(deThi.getKy()).append(" Năm học: ").append(deThi.getNamHoc()).append("\r\n");
+		str.append("Thời gian: ").append(deThi.getThoiGian()).append(" phút").append("\r\n");
 		for(int i = 0, size = deThi.getDsCauHoi().size(); i < size ; i++){
 			CauHoi cauHoi = deThi.getDsCauHoi().get(i);
 			QuanLyCauHoi qlCauHoi = new QuanLyCauHoi(cauHoi);
-			str.append("Câu ").append(i+1).append(" (").append(cauHoi.getDiem()).append(" điểm)").append("\n");
-			str.append(qlCauHoi.inCauHoi());
+			str.append("Câu ").append(i+1).append(" (").append(cauHoi.getDiem()).append(" điểm)").append("\r\n");
+			str.append(qlCauHoi.inCauHoi()).append("\r\n");
 		}
 		return str;
 	}
@@ -144,6 +148,14 @@ public class QuanLyDeThi {
 		DeThi deThi = (DeThi) inStream.readObject();
 		inStream.close();
 		return deThi;
+	}
+	
+	public String xuatDeThiRaFile() throws IOException{
+		File dethi = new File(QuanLyDeThi.WORKING_DIR + deThi.getMaDeThi() + ".txt");
+		Writer f = new FileWriter(dethi);
+		f.write(this.inDeThi().toString());
+		f.close();
+		return deThi.getMaDeThi();
 	}
 
 }

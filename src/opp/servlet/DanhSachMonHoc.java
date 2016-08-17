@@ -1,16 +1,14 @@
 package opp.servlet;
 
+import java.io.File;
 import java.io.IOException;
-import java.util.LinkedList;
 
-import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import opp.model.MonHoc;
 import opp.quanly.QuanLyMonHoc;
 
 /**
@@ -37,6 +35,7 @@ public class DanhSachMonHoc extends HttpServlet {
 		// TODO Auto-generated method stub
 		response.setContentType("text/html;charset=UTF-8");
 		request.setCharacterEncoding("utf-8");
+		System.out.println(this.getServletContext().getRealPath(File.separator));
 		request.getRequestDispatcher("danh-sach-mon-hoc.jsp").forward(request, response);
 	}
 

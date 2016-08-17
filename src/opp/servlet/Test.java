@@ -7,22 +7,20 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
-import opp.model.DeThi;
-import opp.quanly.QuanLyDeThi;
+import opp.model.MonHoc;
 
 /**
- * Servlet implementation class LamDeThi
+ * Servlet implementation class Test
  */
-@WebServlet("/lam-de-thi")
-public class LamDeThi extends HttpServlet {
+@WebServlet("/test")
+public class Test extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public LamDeThi() {
+    public Test() {
         super();
         // TODO Auto-generated constructor stub
     }
@@ -32,26 +30,15 @@ public class LamDeThi extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
-		String maDeThi = request.getParameter("maDeThi");
-		if(maDeThi == null){
-			response.sendRedirect("chon-de-thi");
-		} else {
-			HttpSession session = request.getSession(true);
-			DeThi deThi = QuanLyDeThi.layDeThi(maDeThi);
-			session.setAttribute("deThi", deThi);
-			request.getRequestDispatcher("lam-bai-thi.jsp").forward(request, response);
-		}
-		
+		response.getWriter().append("Served at: ").append(getClass().getProtectionDomain().getCodeSource().getLocation().toString());
 	}
 
 	/**
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		HttpSession session = request.getSession();
-		String answer = request.getParameter("answer");
-		session.setAttribute("answer", answer);
-		response.getWriter().append("Nop bai thanh cong");
+		// TODO Auto-generated method stub
+		doGet(request, response);
 	}
 
 }

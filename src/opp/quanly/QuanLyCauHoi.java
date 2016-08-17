@@ -21,12 +21,12 @@ public class QuanLyCauHoi {
 	
 	public StringBuilder inCauHoi(){
 		StringBuilder str = new StringBuilder();
-		str.append(cauHoi.getDeBai()).append("\n");
+		str.append(cauHoi.getDeBai()).append("\r\n");
 		if(cauHoi instanceof TracNghiem){
 			TracNghiem tn = (TracNghiem) cauHoi;
 			char k = 'A';
 			for(int i = 0, size = tn.getDsDapAn().size(); i < size; i++, k++){
-				str.append(k).append(". ").append(tn.getDsDapAn().get(i).getNoiDung()).append("\n");
+				str.append(k).append(". ").append(tn.getDsDapAn().get(i).getNoiDung()).append("\r\n");
 			}
 		}
 		return str;

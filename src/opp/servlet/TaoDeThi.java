@@ -2,10 +2,7 @@ package opp.servlet;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.Random;
 
-import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -19,8 +16,7 @@ import org.json.simple.JSONObject;
 import opp.model.CauHoi;
 import opp.model.DeThi;
 import opp.model.MonHoc;
-import opp.model.TracNghiem;
-import opp.model.TuLuan;
+import opp.quanly.QuanLyCauHoi;
 import opp.quanly.QuanLyDeThi;
 import opp.quanly.QuanLyMonHoc;
 
@@ -98,7 +94,8 @@ public class TaoDeThi extends HttpServlet {
 			tuongDuong.setDiem(cauHoi.getDiem());
 			deThi.getDsCauHoi().set(index, tuongDuong);
 		} else if (action.equals("inRaFile")) {
-
+			String maDeThi = qlDeThi.xuatDeThiRaFile();
+			response.getWriter().append(maDeThi).append(".txt");
 		} else if (action.equals("save")) {
 			deThi.setSoCauHoi(deThi.getDsCauHoi().size());
 
@@ -110,6 +107,11 @@ public class TaoDeThi extends HttpServlet {
 		} else if (action.equals("delete")) {
 			session.removeAttribute("deThi");
 			session.removeAttribute("monHoc");
+		} else if (action.equals("daoDapAn")){
+			for(CauHoi cauHoi : deThi.getDsCauHoi()){
+				QuanLyCauHoi ql = new QuanLyCauHoi(cauHoi);
+				ql.daoDapAn();
+			}
 		}
 
 	}

@@ -1,0 +1,28 @@
+body { font: 15px / 20px Arial; margin: 0; background: #555; }
+.container { max-width: 1000px; margin: 0 auto; padding: 15px 30px; background: #FFF; min-height: 100vh; -webkit-box-sizing: border-box; -moz-box-sizing: border-box; box-sizing: border-box; }
+h1 { text-align: center; }
+h3 { text-align: center; font-weight: normal; }
+.code { display: inline-block; border: 1px solid #CCC; padding: 5px 10px; }
+hr { border-top: 1px solid #CCC; }
+h4 { font-size: 20px; font-weight: normal; }
+.question { padding-left: 35px; }
+.question+.question { margin-top: 15px; padding-top: 15px; border-top: 1px solid #CCC; }
+.question .no { float: left; margin-left: -35px; font-weight: bold; display: inline-block; border: 1px solid #CCC; border-radius: 50%; width: 20px; text-align: center; background: #EEE; }
+.question.true .no { background: #8BC34A; border-color: #8BC34A; color: #FFF; }
+.question.false .no { background: #F44336; border-color: #F44336; color: #FFF; }
+.question .title { padding-bottom: 5px; font-size: 110%; }
+.question .choice { list-style: upper-alpha; }
+.question .choice li { margin: 5px 0 0; }
+.question .choice li label { display: inline-block; position: relative; vertical-align: top; padding-left: 40px; margin-left: -40px; }
+.question .choice li input[type=checkbox] { -webkit-appearance: none; -moz-appearance: none; appearance: none; border: 1px solid #CCC; height: 15px; width: 15px; margin: 0; outline: 0; position: absolute; top: 2px; left: 0; }
+.question .choice li input[type=checkbox]:checked:before, .question .choice li input[type=checkbox]:indeterminate:before { content: "\f00c"; font-family: FontAwesome; font-size: 12px; -webkit-font-smoothing: antialiased; text-align: center; line-height: 13px; color: #00a8e6; display: block; }
+.question .choice li input[type=checkbox][readonly] { background: #DDD; }
+.question .choice li.true { color: #009500; }
+.question .choice li.false { color: #BE2121; }
+.question .choice li.check { font-weight: bold; }
+.question .answer p { margin: 5px 0; }
+.question .answer textarea { width: 100%; resize: none; font-family: Arial; -webkit-box-sizing: border-box; -moz-box-sizing: border-box; box-sizing: border-box; }
+.question .answer textarea[readonly] { background: #DDD; }
+.finish { padding: 15px 0; margin: 15px auto 0; max-width: 400px; }
+.finish .submit { border: 0; background: #2196F3; color: #FFF; width: 100%; height: 35px; font-size: 120%; cursor: pointer; }
+.finish .submit:hover { background: #1C82D3; }

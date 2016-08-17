@@ -143,9 +143,6 @@
 
 									</div>
 									<!-- /.box-body -->
-									<p>{{cauHoi | json}}</p>
-
-									<p>{{cauHoiTuongDuong}}</p>
 									<p>{{message}}</p>
 								</div>
 								<!-- /.tab-pane -->

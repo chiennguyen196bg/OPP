@@ -119,8 +119,6 @@
 								<!-- nav-tabs-custom -->
 							</div>
 							<p>{{message}}</p>
-							<p>{{listCauHoi | json}}</p>
-							<p>{{listCauHoiTrongDe | json}}</p>
 							<p></p>
 						</div>
 						<!-- /.col -->

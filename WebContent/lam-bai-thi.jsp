@@ -60,7 +60,6 @@ ArrayList<CauHoi> dsCauHoi = deThi.getDsCauHoi();
 		<%} %>
 		
 	</div>
-	<p>{{list | json}}</p>
 	<p>{{message}}</p>
 	<div class="finish"><button ng-click="submit()" class="submit">Nộp bài</button></div>
 </div>

@@ -79,7 +79,6 @@
 	</section>
 </div>
 <!-- /.content-wrapper -->
-<p>{{message}}</p>
 
 <%@ include file="/include/footer.jsp"%>
 

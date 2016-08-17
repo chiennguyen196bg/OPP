@@ -151,9 +151,6 @@ Integer index2 = (Integer) request.getAttribute("index2");
 
 									</div>
 									<!-- /.box-body -->
-									<p>{{cauHoi | json}}</p>
-									<p>{{doKho}}</p>
-									<p>{{index1}}</p>
 									<p>{{message}}</p>
 								</div>
 								<!-- /.tab-pane -->

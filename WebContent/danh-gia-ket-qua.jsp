@@ -47,7 +47,7 @@ ArrayList<CauHoi> dsCauHoiDung = (ArrayList<CauHoi>) request.getAttribute("dsCau
 		
 		<%for(int i = 0, size = dsCauHoi.size(); i < size; i++){ %>
 			<%CauHoi cauHoi = dsCauHoi.get(i); %>
-			<%if(cauHoi instanceof TuLuan) {%>
+			<%if(cauHoi instanceof TuLuan) { %>
 				<div class="question">
 			<%} else if(dsCauHoiDung.contains(cauHoi)) { %>
 				<div class="question true">
@@ -80,14 +80,13 @@ ArrayList<CauHoi> dsCauHoiDung = (ArrayList<CauHoi>) request.getAttribute("dsCau
 					<p>Câu trả lời:</p>
 					<textarea ng-bind="list[<%=i %>]" rows="10" readonly disabled></textarea>
 					<p>Đáp án:</p>
-					<textarea value="<%=tl.getGoiY() %>" rows="10" readonly disabled></textarea>
+					<textarea placeholder="<%=tl.getGoiY() %>" rows="10" readonly disabled></textarea>
 				</div>
 			<%} %>
 			</div><!-- .question -->
 		<%} %>
 		
 	</div>
-	<div class="finish"><button class="submit">Nộp bài</button></div>
 </div>
 </body>
 </html>
